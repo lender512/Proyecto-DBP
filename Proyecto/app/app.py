@@ -63,16 +63,16 @@ db.session.commit()
 def index():
     return render_template('index.html')
 
-@app.route('/registrationButton')
-def registrationButton():
-    return render_template('registration.html')
+@app.route('/signInButton')
+def signInButton():
+    return render_template('signIn.html')
 
 @app.route('/logInButton')
 def logInButton():
     return render_template('logIn.html')
 
-@app.route('/registration', methods=['POST'])
-def registration():
+@app.route('/signIn', methods=['POST'])
+def signIn():
     name = request.form.get('name', '')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
