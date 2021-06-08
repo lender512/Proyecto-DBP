@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask.helpers import url_for
-from flask.wrappers import Request
+from flask.wrappers import Request, Response
 from flask import Flask
 import os
 import json
@@ -47,6 +47,17 @@ def logInButton():
 def createPost():
     return render_template('createPost.html')
 
+@app.route('/post/create', methods =['POST'])
+def create_post():
+    response = {}
+    error = False
+
+    comment = request.get_json()['comment']
+    post = Post(id_persona=1, comment = comment, valoracion='value')
+    db.session.add(post)
+    db.session.commit()
+    db.session.close()
+
 @app.route('/logIn', methods=['POST'])
 def logIn():
     email = request.form.get('email', '')
@@ -61,7 +72,7 @@ def logIn():
 
 @app.route('/main')
 def main():
-    return render_template('main.html')
+    return render_template('main.html', data =Post.query.all())
 
 
 if __name__ == '__main__':
