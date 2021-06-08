@@ -39,6 +39,8 @@ def signIn():
     db.session.add(person)
     db.session.commit()
 
+    return render_template('index.html')
+
 @app.route('/logInButton')
 def logInButton():
     return render_template('logIn.html')

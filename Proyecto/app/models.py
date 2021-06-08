@@ -22,7 +22,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_persona = db.Column(db.Integer, db.ForeignKey(Person.id), nullable=False, )
     comment = db.Column(db.String(500), nullable=False)
-    valoracion = db.Column(db.String(500), nullable=False)
+    valoracion = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'Post: {self.id}, {self.id_persona}, {self.comment}'
