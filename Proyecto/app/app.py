@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify
+
 from flask.helpers import url_for
 from flask.wrappers import Request, Response
 from flask import Flask
+from flask_login import LoginManager, login_user, current_user
 import os
 import json
+from flask_login.utils import login_required
 
 from sqlalchemy.orm import query
 
@@ -20,6 +23,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba7689
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+#login config
+login = LoginManager(app)
+login.init_app(app)
+
+@login.user_loader
+def load_person(id):
+    return Person.query.get(int(id))
 
 @app.route('/')
 def index():
@@ -56,12 +67,10 @@ def create_post():
     error = False
 
     comment = request.get_json()['comment']
-    post = Post(id_persona=session.get('id'), comment = comment, valoracion='value')
-    person = Person.query.get(session.get('id'))
+    post = Post(id_persona=current_user.id, comment = comment, valoracion='value')
     
     response['comment'] = comment
-    person = Person.query.filter_by(id=session.get('id')).first()
-    response['name'] = person.name
+    response['name'] = current_user.name
 
     db.session.add(post)
     db.session.commit()
@@ -81,7 +90,8 @@ def logIn():
     person = Person.query.filter_by(email=email).first()
 
     if(person.password == password):
-        session['id'] = person.id
+        #session['id'] = person.id
+        login_user(person)
         response['succes'] = True
     else:
         response['succes'] = False
@@ -89,6 +99,7 @@ def logIn():
     return jsonify(response)
 
 @app.route('/main')
+@login_required
 def main():
     return render_template('main.html', data = Post.query.all(), persons = Person.query.all())
 
