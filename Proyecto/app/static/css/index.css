@@ -1,0 +1,128 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background: url(../images/fondo2.jpg);
+    background-size: 100%;
+    color:azure;
+}
+#contenedor{
+    width: 960px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+header{
+    height: 150px;
+    background: rgb(66, 60, 52);
+}
+header h1{
+    font-size: 50px;
+    text-align: center;
+    line-height: 150px;
+}
+nav{
+    background:crimson;
+    height: 60px;
+}
+nav h2{
+    font-size: 35px; 
+    text-align: center;
+    line-height: 60px;
+}
+#contenido{
+    width: 700px;
+    height: 500px;
+    float: left;
+    background: rgb(207, 143, 22);
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+#contenido h2{
+    font-size: 35px; 
+    text-align: center;
+    line-height: 500px;
+}
+aside h2{
+    font-size: 35px; 
+    text-align: center;
+    line-height: 500px;
+}
+footer{
+    background: skyblue;
+    clear: both;
+}
+footer h2{
+    font-size: 35px; 
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+.box h2{
+    color: white;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+    .box{
+    width: 250px;
+    height: 500px;
+    margin-top: 10px;
+    float: right;
+    background: #191919;
+    text-align: center;
+  }
+  .box h1{
+    color: white;
+    padding-top: 10%;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .box input[type = "text"],.box input[type = "password"],.box input[type = "number"],.box input[type = "email"]{
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 14px 10px;
+    width: 140px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+  }
+  .box input[type = "text"]:focus,.box input[type = "password"]:focus,.box input[type = "number"]:focus,.box input[type = "email"]:focus{
+    width: 196px;   
+    border-color: #2ecc71;
+  }
+
+  .box input[type = "button"]{
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor:pointer;
+  }
+  .box input[type = "button"]:hover{
+    background: #2ecc71;
+  }
+  .box a{
+    color: white;
+    margin: 20px auto;
+    font-weight: 300px;
+    text-align: center;
+    float: right;
+  }

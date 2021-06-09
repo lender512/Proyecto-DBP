@@ -55,7 +55,7 @@ def signIn():
 
 @app.route('/logInButton')
 def logInButton():
-    return render_template('logIn.html')
+    return render_template('login2.html')
 
 @app.route('/createPost')
 def createPost():
