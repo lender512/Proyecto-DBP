@@ -107,7 +107,7 @@
                         }).then(function(jsonResponse){
                             const listItem = document.createElement("li")
                             //listItem.innerHTML = jsonResponse['comment']
-                            newitem = jsonResponse['id'] + ": " + jsonResponse['comment']
+                            newitem = jsonResponse['name'] + ": " + jsonResponse['comment']
                             listItem.appendChild(document.createTextNode(newitem));
                             document.getElementById('postList').appendChild(listItem)
                         })
@@ -122,9 +122,9 @@
                 <ul id="postList">
                     {% for i in data%}
                         {%for p in persons%}
-                        {% if i.id_persona == p.id %}
-                            <li>{{p.name}}: {{i.comment}}</li>
-                        {%endif%}
+                            {% if i.id_persona == p.id %}
+                                <li>{{p.name}}: {{i.comment}}</li>
+                            {%endif%}
                         {% endfor %}
                     {% endfor %}
                 </ul>

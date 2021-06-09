@@ -12,6 +12,7 @@ from models import *
 from werkzeug.utils import redirect
 
 app = Flask(__name__)
+
 app.secret_key = '12345678910'
 
 #DB config
@@ -56,9 +57,11 @@ def create_post():
 
     comment = request.get_json()['comment']
     post = Post(id_persona=session.get('id'), comment = comment, valoracion='value')
+    person = Person.query.get(session.get('id'))
     
     response['comment'] = comment
-    response['id'] = post.id_persona
+    person = Person.query.filter_by(id=session.get('id')).first()
+    response['name'] = person.name
 
     db.session.add(post)
     db.session.commit()
@@ -76,11 +79,12 @@ def logIn():
     password = request.get_json()['password']
     
     person = Person.query.filter_by(email=email).first()
-    session['id'] = person.id
+    
+    
 
-    #if(person.password == password):
-    response['id'] = person.id
-    #else:
+    if(person.password == password):
+        session['id'] = person.id
+    #else: manejar errores
     #    return render_template('logIn.html')
 
     return jsonify(response)
