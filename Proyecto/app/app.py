@@ -79,13 +79,12 @@ def logIn():
     password = request.get_json()['password']
     
     person = Person.query.filter_by(email=email).first()
-    
-    
 
     if(person.password == password):
         session['id'] = person.id
-    #else: manejar errores
-    #    return render_template('logIn.html')
+        response['succes'] = True
+    else:
+        response['succes'] = False
 
     return jsonify(response)
 

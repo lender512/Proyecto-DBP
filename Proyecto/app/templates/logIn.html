@@ -29,10 +29,12 @@
                     //console.log("logeado con id: ", response['id']);
                     window.location.href="/main";
                  }).then(function(jsonresponse){
-                     console.log("Registrado con el id: ", jsonresponse["id"]);
-                     sessionStorage.setItem("id",jsonresponse["id"]);
-                     console.log("Se guardó en sesion: ", sessionStorage.getItem("id"));
-                     window.location.href="/main";
+                     if (jsonresponse['succes'] === true){
+                         console.log("Registrado con el id: ", jsonresponse["id"]);
+                        sessionStorage.setItem("id",jsonresponse["id"]);
+                        console.log("Se guardó en sesion: ", sessionStorage.getItem("id"));
+                        window.location.href="/main";
+                        }
                  })
             }
         </script>
