@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, session
 from flask.helpers import url_for
 from flask.wrappers import Request, Response
 from flask import Flask
 import os
 import json
 
+from sqlalchemy.orm import query
+
 from models import *
 
 from werkzeug.utils import redirect
 
 app = Flask(__name__)
+app.secret_key = '12345678910'
 
 #DB config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'
@@ -32,9 +35,6 @@ def signIn():
     password = request.form.get('password', '')
     type = request.form['type']
     
-    if bool(Person.query.filter_by(name=name).first()):
-        return redirect(url_for('index'))
-
     person = Person(name=name, email = email, password = password, type = type)
     db.session.add(person)
     db.session.commit()
@@ -55,26 +55,39 @@ def create_post():
     error = False
 
     comment = request.get_json()['comment']
-    post = Post(id_persona=1, comment = comment, valoracion='value')
+    post = Post(id_persona=session.get('id'), comment = comment, valoracion='value')
+    
+    response['comment'] = comment
+    response['id'] = post.id_persona
+
     db.session.add(post)
     db.session.commit()
     db.session.close()
 
+    return jsonify(response)
+
 @app.route('/logIn', methods=['POST'])
 def logIn():
-    email = request.form.get('email', '')
-    password = request.form.get('password', '')
+
+    response = {}
+    error = False
+
+    email = request.get_json()['email']
+    password = request.get_json()['password']
     
     person = Person.query.filter_by(email=email).first()
+    session['id'] = person.id
 
-    if(person.password == password):
-        return redirect(url_for('main'))
-    else:
-        return render_template('logIn.html')
+    #if(person.password == password):
+    response['id'] = person.id
+    #else:
+    #    return render_template('logIn.html')
+
+    return jsonify(response)
 
 @app.route('/main')
 def main():
-    return render_template('main.html', data =Post.query.all())
+    return render_template('main.html', data = Post.query.all(), persons = Person.query.all())
 
 
 if __name__ == '__main__':

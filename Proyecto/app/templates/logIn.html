@@ -7,10 +7,34 @@
     </head>
 
     <body>
-        <form action="\logIn" method="POST">
-            <input type="text" name="email" placeholder="Enter email"/><br>
-            <input type="password" name="password" placeholder="Enter password"/><br>
+        <form id="loginForm">
+            <input type="text" id="email" name="email" placeholder="Enter email"/><br>
+            <input type="password" id="password" name="password" placeholder="Enter password"/><br>
             <input type="submit" value="Log In"/>
         </form>
+        <script>
+            document.getElementById("loginForm").onsubmit = function(e){
+                e.preventDefault();
+                 fetch('/logIn', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        'email' : document.getElementById("email").value,
+                        'password' : document.getElementById("password").value
+                    }),
+                     headers: {
+                         'Content-Type': 'application/json'
+                     }
+                 }).then(function(response){
+                    return response.json()
+                    //console.log("logeado con id: ", response['id']);
+                    window.location.href="/main";
+                 }).then(function(jsonresponse){
+                     console.log("Registrado con el id: ", jsonresponse["id"]);
+                     sessionStorage.setItem("id",jsonresponse["id"]);
+                     console.log("Se guardó en sesion: ", sessionStorage.getItem("id"));
+                     window.location.href="/main";
+                 })
+            }
+        </script>
     </body>
 </html>
