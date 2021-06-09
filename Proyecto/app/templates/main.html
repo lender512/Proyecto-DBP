@@ -79,6 +79,15 @@
                 padding: 2%;
                 box-sizing: border-box;
             }
+
+            .post{
+                font-weight: lighter;
+                
+                width: 90%;
+                height: auto;
+
+                
+            }
         </style>
     </head>
 
@@ -106,11 +115,18 @@
                         }).then(function(response) {
                             return response.json()
                         }).then(function(jsonResponse){
-                            const listItem = document.createElement("li")
+                            const listItem = document.createElement("div")
+                            listItem.classList.add("post")
+                            listItem.setAttribute("style", "background-color: rgb(158, 195, 236)")
                             //listItem.innerHTML = jsonResponse['comment']
-                            newitem = jsonResponse['name'] + ": " + jsonResponse['comment']
+                            newitem = jsonResponse['name'] + ": "
+                            const content = document.createElement("div")
+                            content.setAttribute("style", "background-color: aliceblue")
+                            content.appendChild(document.createTextNode(jsonResponse['comment']))
+                            
                             listItem.appendChild(document.createTextNode(newitem));
-                            document.getElementById('postList').appendChild(listItem)
+                            listItem.appendChild(content)
+                            document.getElementById('postList').prepend(listItem)
                         })
                     }
                 </script>
@@ -121,10 +137,14 @@
             <div class="content-large">Content a
 
                 <ul id="postList">
-                    {% for i in data%}
+                    {% for i in data|reverse%}
                         {%for p in persons%}
                             {% if i.id_persona == p.id %}
-                                <li>{{p.name}}: {{i.comment}}</li>
+                                <div class="post" style="background-color: rgb(158, 195, 236);">{{p.name}}: 
+                                    <div style="background-color: aliceblue;">
+                                        {{i.comment}}
+                                    </div>
+                                </div>
                             {%endif%}
                         {% endfor %}
                     {% endfor %}
