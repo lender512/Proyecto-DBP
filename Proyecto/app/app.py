@@ -51,11 +51,11 @@ def signIn():
     db.session.add(person)
     db.session.commit()
 
-    return render_template('login2.html')
+    return render_template('index.html')
 
 @app.route('/logInButton')
 def logInButton():
-    return render_template('main.html')
+    return render_template('login2.html')
 
 @app.route('/createPost')
 def createPost():
