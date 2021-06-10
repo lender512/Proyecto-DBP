@@ -6,7 +6,7 @@ body{
   }
   .box{
     width: 300px;
-    padding: 40px;
+    padding: 50px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -38,7 +38,7 @@ body{
     border-color: #2ecc71;
   }
 
-  .box input[type = "button"]{
+  .box input[type = "button"], .box input[type = "submit"]{
     border:0;
     background: none;
     display: block;
@@ -52,7 +52,7 @@ body{
     transition: 0.25s;
     cursor: pointer;
   }
-  .box input[type = "button"]:hover{
+  .box input[type = "button"]:hover, .box input[type = "submit"]:hover{
     background: #2ecc71;
   }
   
@@ -60,12 +60,19 @@ body{
     border:0;
     background: none;
     display: block;
-    margin: 20px auto;
+    margin: 5px auto;
     border: 2px solid #3498db;
-    padding: 14px 10px;
-    width: 200px;
+    padding: 12px 10px;
+    width: 100px;
     outline: none;
     color: white;
-    border-radius: 24px;
+    border-radius: 20px;
     transition: 0.25s;
+  }
+
+  .box a{
+    text-decoration: none;
+    font-size:  12px;
+    line-height:  20px;
+    color: white;
   }
