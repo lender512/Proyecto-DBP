@@ -56,3 +56,16 @@ body{
     background: #2ecc71;
   }
   
+  .box input[type = "radio"],.box label[for="landlord"], .box label[for="tenant"]{
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #3498db;
+    padding: 14px 10px;
+    width: 200px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+  }
