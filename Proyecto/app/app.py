@@ -38,7 +38,7 @@ def index():
 
 @app.route('/signInButton')
 def signInButton():
-    return render_template('signIn.html')
+    return render_template('register.html')
 
 @app.route('/signIn', methods=['POST'])
 def signIn():
