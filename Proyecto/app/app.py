@@ -23,6 +23,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba7689
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+>>>>>>> Stashed changes
 
 #login config
 login = LoginManager(app)
