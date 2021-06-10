@@ -38,7 +38,7 @@ body{
     border-color: #2ecc71;
   }
 
-  .box input[type = "button"]{
+  .box input[type = "button"], .box input[type = "submit"]{
     border:0;
     background: none;
     display: block;
@@ -52,7 +52,7 @@ body{
     transition: 0.25s;
     cursor: pointer;
   }
-  .box input[type = "button"]:hover{
+  .box input[type = "button"]:hover, .box input[type = "submit"]:hover{
     background: #2ecc71;
   }
   
@@ -68,4 +68,11 @@ body{
     color: white;
     border-radius: 24px;
     transition: 0.25s;
+  }
+
+  .box a{
+    text-decoration: none;
+    font-size:  12px;
+    line-height:  20px;
+    color: white;
   }
