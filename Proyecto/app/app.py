@@ -24,9 +24,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-db.create_all()
-db.session.commit()
-
 #login config
 login = LoginManager(app)
 login.init_app(app)
@@ -93,7 +90,6 @@ def edit_post():
     db.session.expunge(post)
     #setattr(post, 'comment', comment)
     post.comment = comment
-    print(post.comment)
     db.session.add(post)
     db.session.commit()
     db.session.close()
