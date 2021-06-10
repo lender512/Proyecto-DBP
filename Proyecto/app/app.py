@@ -24,6 +24,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+db.create_all()
+db.session.commit()
+
 #login config
 login = LoginManager(app)
 login.init_app(app)
@@ -68,13 +71,36 @@ def create_post():
 
     comment = request.get_json()['comment']
     post = Post(id_persona=current_user.id, comment = comment, valoracion='value')
-    
-    response['comment'] = comment
-    response['name'] = current_user.name
 
     db.session.add(post)
     db.session.commit()
+    #db.session.close()
+    response['comment'] = comment
+    response['name'] = current_user.name
+    
+
+    return jsonify(response)
+
+@app.route('/post/edit', methods =['POST'])
+def edit_post():
+    response = {}
+    error = False
+
+    comment = request.get_json()['comment']
+    post_id = request.get_json()['post_id']
+
+    post = db.session.query(Post).filter(Post.id == post_id).first()
+    db.session.expunge(post)
+    #setattr(post, 'comment', comment)
+    post.comment = comment
+    print(post.comment)
+    db.session.add(post)
+    db.session.commit()
     db.session.close()
+    #db.session.expire_all()
+
+    response['comment'] = comment
+    response['id'] = post_id
 
     return jsonify(response)
 
@@ -101,7 +127,13 @@ def logIn():
 @app.route('/main')
 @login_required
 def main():
+    db.session.commit()
     return render_template('main.html', data = Post.query.all(), persons = Person.query.all())
+
+@app.route('/edit')
+@login_required
+def edit():
+    return render_template('edit.html', data = Post.query.all(), persons = Person.query.all(), user = current_user)
 
 
 if __name__ == '__main__':
