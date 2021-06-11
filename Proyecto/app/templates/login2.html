@@ -10,11 +10,11 @@
         <h1>Login</h1>
         <input type="text" id="email" name="email"  placeholder="Email">
         <input type="password" id="password" name="password" placeholder="Password">
-        <input type="button"  value="Log In"/><br>
+        <input type="submit"  value="Log In" /><br>
         <a href="./templates/register.html">¿Aún no tienes una cuenta? Regístrate</a>
     </form> 
     <script>
-        document.getElementById("loginForm").onclick = function(e){
+        document.getElementById("loginForm").onsubmit = function(e){
             e.preventDefault();
              fetch('/logIn', {
                 method: "POST",

@@ -106,6 +106,21 @@ def edit_post():
 
     return jsonify(response)
 
+@app.route('/apartments/create', methods =['POST'])
+def create_apartment():
+    response = {}
+    error = False
+
+    district = request.get_json()['district']
+    address = request.get_json()['address']
+    apartment = Apartment(id_persona=current_user.id, district = district, address= address)
+    db.session.add(apartment)
+    db.session.commit()
+    response['address'] = apartment.address
+    db.session.close()
+
+    return jsonify(response)
+
 @app.route('/logIn', methods=['POST'])
 def logIn():
 
@@ -130,7 +145,7 @@ def logIn():
 @login_required
 def main():
     db.session.commit()
-    return render_template('main.html', data = Post.query.all(), persons = Person.query.all())
+    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all())
 
 @app.route('/edit')
 @login_required
