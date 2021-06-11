@@ -45,7 +45,7 @@ def signIn():
     name = request.form.get('name', '')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
-    type = request.form['type']
+    type = request.form.get('type', '')
     
     person = Person(name=name, email = email, password = password, type = type)
     db.session.add(person)
