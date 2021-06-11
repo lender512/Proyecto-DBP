@@ -84,6 +84,12 @@
                             headers:{
                                 'Content-Type':'application/json'
                             }
+                        }).then(function(response) {
+                            return response.json()
+                        }).then(function(jsonResponse){
+                            const liItem = document.createElement("li")
+                            liItem.innerHTML = jsonResponse['district'] + ", " + jsonResponse['address']
+                            document.getElementById('apartmentList').appendChild(liItem)
                         });
                     }
                 </script>

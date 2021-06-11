@@ -123,6 +123,7 @@ def create_apartment():
     db.session.add(apartment)
     db.session.commit()
     response['address'] = apartment.address
+    response['district'] = apartment.district
     db.session.close()
 
     return jsonify(response)
