@@ -1,96 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../static/css/main.css">
         <title>
             Main
         </title>
-        <style>
-            body {
-                margin: 0;
-                background-color: #dae0ef;
-            }
-
-            .container {
-                width: 100vw;
-                height: 100vh;
-
-                font-family: 'Quicksand', sans-serif;
-                font-weight: bold;
-                font-size: 20px;
-
-                display: grid;
-
-                grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: 50px 1fr 1fr 100px;
-
-                gap: 10px;
-
-                padding: 10px;
-                box-sizing: border-box;
-            }
-
-            .container div {
-                padding: 10px;
-                border: 1px solid #000;
-                background-color: #89a3d0;
-            }
-
-            .header {
-                grid-column-start: 1;
-                grid-column-end: 4;
-
-                text-align: center;
-                font-size: 25px;
-                
-            }
-            
-            .content-large {
-                grid-column-start: 2;
-                grid-column-end: 4;
-                grid-row-start: 2;
-                grid-row-end: span 2;
-                overflow-y: scroll;
-            }
-
-            .content-small{
-
-                display: grid;
-
-                grid-template-rows: 30px 1fr 30px;
-
-                grid-column-start: 1;
-                grid-row-start: span 1;
-                grid-row-end: span 1;
-            }
-            
-            .footer{
-                grid-column: 1 / span 3;
-            }
-
-            .PostTextArea{
-                font-family: 'Quicksand', sans-serif;
-                font-weight: lighter;
-                font-size: 20px;
-
-                resize: none;
-
-                width: 100%;
-                height: 95%;
-                padding: 2%;
-                box-sizing: border-box;
-            }
-
-            .post{
-                font-weight: lighter;
-                
-                width: 90%;
-                height: auto;
-
-                
-            }
-        </style>
     </head>
-
     <body>
         <div class="container">
             <div class="header">Muro</div>
@@ -135,13 +51,12 @@
                 YOLO
             </div>
             <div class="content-large">Content a
-
                 <ul id="postList">
                     {% for i in data|reverse%}
                         {%for p in persons%}
                             {% if i.id_persona == p.id %}
-                                <div class="post" style="background-color: rgb(158, 195, 236);">{{p.name}}: 
-                                    <div style="background-color: aliceblue;">
+                                <div class="post" >{{p.name}}: 
+                                    <div class="comment">
                                         {{i.comment}}
                                     </div>
                                 </div>
@@ -149,7 +64,6 @@
                         {% endfor %}
                     {% endfor %}
                 </ul>
-
             </div>
             <div class="footer">Footer</div>
 
