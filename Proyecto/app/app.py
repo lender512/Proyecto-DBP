@@ -25,12 +25,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba7689
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-<<<<<<< Updated upstream
-=======
+
 migrate = Migrate(app, db)
 #db.create_all()
 #db.session.commit()
->>>>>>> Stashed changes
 
 #login config
 login = LoginManager(app)
