@@ -14,6 +14,8 @@ from models import *
 
 from werkzeug.utils import redirect
 
+from flask_migrate import Migrate
+
 app = Flask(__name__)
 
 app.secret_key = '12345678910'
@@ -24,8 +26,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-db.create_all()
-db.session.commit()
+migrate = Migrate(app, db)
+#db.create_all()
+#db.session.commit()
 
 #login config
 login = LoginManager(app)
@@ -48,7 +51,7 @@ def signIn():
     name = request.form.get('name', '')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
-    type = request.form['type']
+    type = request.form.get('type', '')
     
     person = Person(name=name, email = email, password = password, type = type)
     db.session.add(person)
@@ -93,7 +96,6 @@ def edit_post():
     db.session.expunge(post)
     #setattr(post, 'comment', comment)
     post.comment = comment
-    print(post.comment)
     db.session.add(post)
     db.session.commit()
     db.session.close()
@@ -101,6 +103,21 @@ def edit_post():
 
     response['comment'] = comment
     response['id'] = post_id
+
+    return jsonify(response)
+
+@app.route('/apartments/create', methods =['POST'])
+def create_apartment():
+    response = {}
+    error = False
+
+    district = request.get_json()['district']
+    address = request.get_json()['address']
+    apartment = Apartment(id_persona=current_user.id, district = district, address= address)
+    db.session.add(apartment)
+    db.session.commit()
+    response['address'] = apartment.address
+    db.session.close()
 
     return jsonify(response)
 
@@ -128,7 +145,7 @@ def logIn():
 @login_required
 def main():
     db.session.commit()
-    return render_template('main.html', data = Post.query.all(), persons = Person.query.all())
+    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all())
 
 @app.route('/edit')
 @login_required
