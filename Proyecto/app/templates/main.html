@@ -63,11 +63,13 @@
                         <input type="submit" value="Crear">
                     </div>
                 </form>
-                <ul id="depList">
+                <ul id="apartmentList">
                     {% for i in apartments%}
-                        <li>
-                            {{i.district}} {{i.address}}
-                        </li>
+                            {% if i.id_persona == user.id %}
+                                <li>
+                                    {{i.district}} {{i.address}}
+                                </li>
+                            {%endif%}
                     {% endfor %}
                 </ul>
                 <script>
