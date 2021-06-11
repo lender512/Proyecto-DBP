@@ -73,13 +73,19 @@ def create_post():
     error = False
 
     comment = request.get_json()['comment']
-    post = Post(id_persona=current_user.id, comment = comment, valoracion='value')
+    address = request.get_json()['address']
+    print(address)
+    apt = Apartment.query.filter_by(address = address).first()
+    
+    post = Post(id_persona=current_user.id, comment = comment, valoracion=0, address = address, district = apt.district)
 
     db.session.add(post)
     db.session.commit()
     #db.session.close()
     response['comment'] = comment
     response['name'] = current_user.name
+    response['address'] = address
+    response['district'] = apt.district
     
 
     return jsonify(response)
@@ -145,7 +151,7 @@ def logIn():
 @login_required
 def main():
     db.session.commit()
-    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all())
+    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all(), user = current_user)
 
 @app.route('/edit')
 @login_required
