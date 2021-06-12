@@ -206,6 +206,14 @@ def main():
 def edit():
     return render_template('edit.html', data = Post.query.all(), persons = Person.query.all(), user = current_user)
 
+@app.route('/main', methods=['POST'])
+def search_by_district():
+    district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
+    return redirect('search/'+district_searched)
+
+@app.route('/search/<district_searched>')
+def search(district_searched):
+    return render_template('search.html', data = Post.query.filter_by(district=district_searched).limit(50).all(), user = current_user)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
