@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            Party
+        </title>
+    </head>
+    <body>
+        <div id="error" class="hidden" style="color: red; size: 10in;">
+            No se encontró ningún distrito con este nombre :c
+        </div>
+        <ul id="districts">
+            {% for d in data %}
+                <li>
+                    {{ d.comment }}
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
