@@ -213,7 +213,7 @@ def search_by_district():
 
 @app.route('/search/<district_searched>')
 def search(district_searched):
-    return render_template('search.html', data = Post.query.filter_by(district=district_searched).limit(50).all(), user = current_user)
+    return render_template('search.html', data = Post.query.filter_by(district=district_searched).limit(30).all(), user = current_user)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
