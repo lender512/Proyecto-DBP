@@ -67,12 +67,28 @@
                     {% for i in apartments%}
                             {% if i.id_persona == user.id %}
                                 <li>
-                                    {{i.district}} {{i.address}}
+                                    {{i.district}},  {{i.address}}
+                                    <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
                                 </li>
                             {%endif%}
                     {% endfor %}
                 </ul>
                 <script>
+                     const items = document.querySelectorAll('.delete-button')
+                    for(let i = 0; i < items.length; i++){
+                        const item = items[i]
+                        item.onclick = function(e){
+                            console.log('onclick event: ', e)
+                            const apartment_id = e.target.dataset['id']
+                            fetch('/apartments/'+ apartment_id + '/delete-apartment',{
+                                method:'DELETE'
+                            }).then(function(){
+                                console.log('event : ', e)
+                                const item = e.target.parentElement
+                                item.remove()
+                            })
+                        }
+                    }
                     document.getElementById('crear-apartment').onsubmit = function(e){
                         e.preventDefault();
                         fetch('/apartments/create',{
@@ -87,9 +103,25 @@
                         }).then(function(response) {
                             return response.json()
                         }).then(function(jsonResponse){
-                            const liItem = document.createElement("li")
-                            liItem.innerHTML = jsonResponse['district'] + ", " + jsonResponse['address']
-                            document.getElementById('apartmentList').appendChild(liItem)
+                            if(jsonResponse['error']===false){
+                                const liItem = document.createElement("li")
+                                const text = document.createTextNode(' ' + jsonResponse.district + ', ' + jsonResponse.address + ' ')
+                                liItem.appendChild(text)
+
+                                const deleteBtn = document.createElement('button')
+                                deleteBtn.className = 'delete-button'
+                                deleteBtn.setAttribute('data-id', jsonResponse.id)
+                                deleteBtn.innerHTML = '&cross;'
+                                liItem.appendChild(deleteBtn)
+                                document.getElementById('apartmentList').appendChild(liItem)
+                                document.getElementById('district').value = ''
+                                document.getElementById('address').value = ''
+                            }else{
+                                const message = jsonResponse['error_message']
+                                document.getElementById('error').className = ''
+                                document.getElementById('error').innerHTML = message
+                            }
+                            
                         });
                     }
                 </script>
