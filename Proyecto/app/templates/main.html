@@ -95,6 +95,25 @@
                                     <div class="comment">
                                         {{i.comment}}
                                     </div>
+                                    {% if user.id != p.id %}
+                                        <input id="valoration_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Lets Go"></input>
+                                        <script>
+                                            var valoration = document.getElementById("valoration_{{i.id}}")
+                                            valoration.onclick = function() {
+                                                fetch('/post/upvote', {
+                                                    method: "POST",
+                                                    body: JSON.stringify({
+                                                        'post_id' : '{{i.id}}'
+                                                    }),
+                                                    headers: {
+                                                        'Content-Type': 'application/json'
+                                                }
+                                            }).then(function(response){
+                                                valoration.disable = true
+                                            })
+                                            }
+                                        </script>
+                                    {%endif%}
                                 </div>
                             {%endif%}
                         {% endfor %}
