@@ -112,6 +112,46 @@ def edit_post():
 
     return jsonify(response)
 
+@app.route('/post/delete', methods =['POST'])
+def delete_post():
+    response = {}
+    error = False
+
+    post_id = request.get_json()['post_id']
+
+    post = db.session.query(Post).get(int(post_id))
+    
+    #Post.query.filter(Post.id == int(post_id)).delete()
+    db.session.delete(post)
+    db.session.commit()
+    db.session.close()
+    #db.session.expire_all()
+
+    response['id'] = post_id
+
+    return jsonify(response)
+
+@app.route('/post/upvote', methods =['POST'])
+def upvote_post():
+    response = {}
+    error = False
+
+    post_id = request.get_json()['post_id']
+    print(post_id)
+
+    post = db.session.query(Post).get(int(post_id))
+
+    post.valoracion = post.valoracion + 1
+    
+    db.session.add(post)
+    db.session.commit()
+    db.session.close()
+    #db.session.expire_all()
+
+    response['id'] = post_id
+
+    return jsonify(response)
+
 @app.route('/apartments/create', methods =['POST'])
 def create_apartment():
     response = {}

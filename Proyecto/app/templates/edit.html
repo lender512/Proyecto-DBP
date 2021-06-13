@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            Main
+        </title>
+        <style>
+            body {
+                margin: 0;
+                background-color: #dae0ef;
+            }
+
+            .container {
+                width: 100vw;
+                height: 100vh;
+
+                font-family: 'Quicksand', sans-serif;
+                font-weight: bold;
+                font-size: 20px;
+
+                display: grid;
+
+                grid-template-columns: 50px 1fr 50px;
+                grid-template-rows: 50px 1fr 50px;
+
+                gap: 10px;
+
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            .container div {
+                padding: 10px;
+                border: 1px solid #000;
+                background-color: #89a3d0;
+            }
+
+            .header {
+                grid-column-start: 1;
+                grid-column-end: 4;
+
+                text-align: center;
+                font-size: 25px;
+                
+            }
+            
+            .content-large {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                grid-row-start: 2;
+                grid-row-end: span 1;
+                overflow-y: scroll;
+            }
+
+            .content-small{
+
+                display: grid;
+
+                grid-template-rows: 30px 1fr 30px;
+
+                grid-column-start: 1;
+                grid-row-start: span 1;
+                grid-row-end: span 1;
+            }
+            
+            .footer{
+                grid-column: 1 / span 3;
+            }
+
+            .EditTextarea{
+                font-family: 'Quicksand', sans-serif;
+                font-weight: lighter;
+                font-size: 20px;
+
+                resize: none;
+
+                width: 100%;
+                height: auto;
+                padding: 1%;
+                box-sizing: border-box;
+            }
+
+            .post{
+                font-weight: lighter;
+                
+                width: 90%;
+                height: auto;
+
+                
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+
+            <div class="content-large">Content a
+
+                <ul id="postList">
+                    {% for i in data|sort(attribute='id', reverse = True)%}
+                        {% if i.id_persona == user.id %}
+                            <div  id="post_{{i.id}}" class="post" style="background-color: rgb(158, 195, 236);">{{user.name}}: 
+                                <div id="postContent_{{i.id}}" style="background-color: aliceblue;">
+                                    {{i.comment}}
+                                </div>
+                                <input id="editbutton_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Edit"></input>
+                                <input id="deletebutton_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Delete"></input>
+                                <script>
+                                    var deletebutton = document.getElementById('deletebutton_{{i.id}}')
+                                    deletebutton.onclick = function(){
+                                        fetch('/post/delete', {
+                                                method: "POST",
+                                                body: JSON.stringify({
+                                                    'post_id' : '{{i.id}}'
+                                                }),
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }).then(function(response) {
+                                                return response.json()
+                                            }).then(function(jsonresponse){
+                                                var id = "post_" + jsonresponse['id']
+                                                document.getElementById(id).remove()
+                                            })
+                                    }
+                                </script>
+                                <script>
+                                    var clickcounter = 0;
+                                    var editbutton = document.getElementById('editbutton_{{i.id}}')
+                                    editbutton.onclick = function(){
+                                        if (clickcounter == 0) {
+                                            clickcounter++;
+                                            console.log('editbutton_{{i.id}}')
+                                            var input = document.createElement("textarea");
+                                            input.innerHTML = '{{i.comment}}'
+                                            input.classList.add('EditTextarea')
+                                            input.id = 'textarea_{{i.id}}'
+                                            var postContent = document.createElement("postContent_{{i.id}}");
+                                            var post = document.getElementById('post_{{i.id}}')
+                                            post.removeChild(post.children[0])
+                                            post.insertBefore(input, post.children[0])
+                                            button.value = "done"
+                                        }
+                                        else if (clickcounter == 1) {
+                                            console.log(document.getElementById('textarea_{{i.id}}').value)
+                                            fetch('/post/edit', {
+                                                method: "POST",
+                                                body: JSON.stringify({
+                                                    'comment' : document.getElementById('textarea_{{i.id}}').value,
+                                                    'post_id' : '{{i.id}}'
+                                                }),
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }).then(function(response) {
+                                                return response.json()
+                                            }).then(function(jsonresponse){
+                                                console.log(jsonresponse['comment'])
+                                                console.log(jsonresponse['id'])
+                                                location.reload()
+                                            })
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        {%endif%}
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+        </div>
+
+        
+    </body>
+</html>
