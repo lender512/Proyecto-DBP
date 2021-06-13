@@ -20,6 +20,7 @@
                 Write Post <br>
                 <form id="newPost">
                     <textarea class="PostTextArea" id="postComment" placeholder="What are you thinking?"></textarea>
+                    <button class="button-edit">Editar</button>
                     <select id="selectedApartment">
                         {% for i in apartments%}
                             {% if i.id_persona == user.id %}
