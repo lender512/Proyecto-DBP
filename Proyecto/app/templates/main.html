@@ -9,11 +9,24 @@
     </head>
     <body>
         <div class="container">
-            <div class="header">Muro</div>
+            <div class="header">
+                Muro
+                <form id="search-district" method="POST">
+                    <input type="text" id="search_district_input" name="search_district_input" placeholder="search district"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </div>
             <div class="content-small">
                 Write Post <br>
                 <form id="newPost">
                     <textarea class="PostTextArea" id="postComment" placeholder="What are you thinking?"></textarea>
+                    <select id="selectedApartment">
+                        {% for i in apartments%}
+                            {% if i.id_persona == user.id %}
+                                <option value="{{i.address}}">{{i.address}}</option> 
+                            {%endif%}
+                    {% endfor %}
+                    </select>
                     <input type="submit" value="Create post"/>
                 </form>
 
@@ -23,7 +36,8 @@
                         fetch('post/create', {
                             method: "POST",
                             body: JSON.stringify({
-                                'comment' : document.getElementById("postComment").value
+                                'comment' : document.getElementById("postComment").value,
+                                'address': document.getElementById("selectedApartment").value
                             }),
                             headers: {
                                 'Content-Type': 'application/json'
@@ -33,11 +47,11 @@
                         }).then(function(jsonResponse){
                             const listItem = document.createElement("div")
                             listItem.classList.add("post")
-                            listItem.setAttribute("style", "background-color: rgb(158, 195, 236)")
+                            //listItem.setAttribute("style", "background-color: rgb(158, 195, 236)")
                             //listItem.innerHTML = jsonResponse['comment']
-                            newitem = jsonResponse['name'] + ": "
+                            newitem = jsonResponse['name'] + "("+ jsonResponse['district'] + ", " + jsonResponse['address'] + ")" +": "
                             const content = document.createElement("div")
-                            content.setAttribute("style", "background-color: aliceblue")
+                            //content.setAttribute("style", "background-color: aliceblue")
                             content.appendChild(document.createTextNode(jsonResponse['comment']))
                             
                             listItem.appendChild(document.createTextNode(newitem));
@@ -55,14 +69,32 @@
                         <input type="submit" value="Crear">
                     </div>
                 </form>
-                <ul id="postList">
+                <ul id="apartmentList">
                     {% for i in apartments%}
-                        <li>
-                            {{i.district}} {{i.address}}
-                        </li>
+                            {% if i.id_persona == user.id %}
+                                <li>
+                                    {{i.district}},  {{i.address}}
+                                    <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
+                                </li>
+                            {%endif%}
                     {% endfor %}
                 </ul>
                 <script>
+                     const items = document.querySelectorAll('.delete-button')
+                    for(let i = 0; i < items.length; i++){
+                        const item = items[i]
+                        item.onclick = function(e){
+                            console.log('onclick event: ', e)
+                            const apartment_id = e.target.dataset['id']
+                            fetch('/apartments/'+ apartment_id + '/delete-apartment',{
+                                method:'DELETE'
+                            }).then(function(){
+                                console.log('event : ', e)
+                                const item = e.target.parentElement
+                                item.remove()
+                            })
+                        }
+                    }
                     document.getElementById('crear-apartment').onsubmit = function(e){
                         e.preventDefault();
                         fetch('/apartments/create',{
@@ -74,16 +106,38 @@
                             headers:{
                                 'Content-Type':'application/json'
                             }
+                        }).then(function(response) {
+                            return response.json()
+                        }).then(function(jsonResponse){
+                            if(jsonResponse['error']===false){
+                                const liItem = document.createElement("li")
+                                const text = document.createTextNode(' ' + jsonResponse.district + ', ' + jsonResponse.address + ' ')
+                                liItem.appendChild(text)
+
+                                const deleteBtn = document.createElement('button')
+                                deleteBtn.className = 'delete-button'
+                                deleteBtn.setAttribute('data-id', jsonResponse.id)
+                                deleteBtn.innerHTML = '&cross;'
+                                liItem.appendChild(deleteBtn)
+                                document.getElementById('apartmentList').appendChild(liItem)
+                                document.getElementById('district').value = ''
+                                document.getElementById('address').value = ''
+                            }else{
+                                const message = jsonResponse['error_message']
+                                document.getElementById('error').className = ''
+                                document.getElementById('error').innerHTML = message
+                            }
+                            
                         });
                     }
                 </script>
             </div>
             <div class="content-large">Content a
                 <ul id="postList">
-                    {% for i in data|reverse%}
+                    {% for i in data|sort(attribute='id', reverse = True)%}
                         {%for p in persons%}
                             {% if i.id_persona == p.id %}
-                                <div class="post" >{{p.name}}: 
+                                <div class="post" >{{p.name}} ({{i.district}}, {{i.address}}):
                                     <div class="comment">
                                         {{i.comment}}
                                     </div>
