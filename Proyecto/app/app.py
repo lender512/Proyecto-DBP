@@ -156,15 +156,63 @@ def upvote_post():
 def create_apartment():
     response = {}
     error = False
+    try:
+        district = request.get_json()['district']
+        address = request.get_json()['address']
+        apartment = Apartment(id_persona=current_user.id, district = district, address= address)
+        db.session.add(apartment)
+        db.session.commit()
+        response['address'] = apartment.address
+        response['district'] = apartment.district
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        response['error_message'] = 'Something Went Wrong!'
+    response['error']= error
 
-    district = request.get_json()['district']
-    address = request.get_json()['address']
-    apartment = Apartment(id_persona=current_user.id, district = district, address= address)
-    db.session.add(apartment)
-    db.session.commit()
-    response['address'] = apartment.address
-    db.session.close()
+    return jsonify(response)
 
+@app.route('/apartments/<apartment_id>/update', methods=['POST'])
+def update_apartment_by_id(apartment_id):
+    response = {}
+    error = False
+    try:
+        apartment = Apartment.query.get_or_404(apartment_id)
+        if apartment is None:
+            response['error_message'] = apartment_id + 'not found in database!'
+        new_apartment = request.get_json()['apartment']
+        apartment.address = new_address
+        apartment.district = new_district
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        response['error_message2'] = 'something went wrong updating!'
+    return jsonify(response)
+
+@app.route('/apartments/<apartment_id>/delete-apartment', methods=['DELETE'])
+def delete_apartment_by_id(apartment_id):
+    response = {}
+    error = False
+    try:
+        apartment = Apartment.query.get_or_404(apartment_id)
+        if apartment is None:
+            response['error_message'] = apartment_id + 'not found in database!'
+        #db.session.delete(apartment)
+        Apartment.query.filter_by(id=apartment_id).delete()
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    response['success'] = error
     return jsonify(response)
 
 @app.route('/logIn', methods=['POST'])
@@ -198,6 +246,19 @@ def main():
 def edit():
     return render_template('edit.html', data = Post.query.all(), persons = Person.query.all(), user = current_user)
 
+@app.route('/main', methods=['POST'])
+def search_by_district():
+    district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
+    return redirect('search/'+district_searched)
+
+@app.route('/search/<district_searched>')
+def search(district_searched):
+    return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, user = current_user)
+
+@app.route('/search', methods=["POST"])
+def search_(district_searched):
+    district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
+    return redirect('search/'+district_searched)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)

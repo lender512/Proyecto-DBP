@@ -29,7 +29,7 @@ class Post(db.Model):
     valoracion = db.Column(db.Integer, nullable=False, default = 0)
 
     def __repr__(self):
-        return f'Post: {self.id}, {self.id_persona}, {self.comment}'
+        return f'Post: {self.id}, {self.id_persona}, {self.comment}, {self.district}'
 
 class Apartment(db.Model):
     __tablename__ = 'apartments'
