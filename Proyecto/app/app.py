@@ -67,6 +67,7 @@ def logInButton():
 def createPost():
     return render_template('createPost.html')
 
+
 @app.route('/post/create', methods =['POST'])
 def create_post():
     response = {}

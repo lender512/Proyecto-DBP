@@ -1,96 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../static/css/edit.css">
         <title>
-            Main
+            Edit
         </title>
-        <style>
-            body {
-                margin: 0;
-                background-color: #dae0ef;
-            }
 
-            .container {
-                width: 100vw;
-                height: 100vh;
-
-                font-family: 'Quicksand', sans-serif;
-                font-weight: bold;
-                font-size: 20px;
-
-                display: grid;
-
-                grid-template-columns: 50px 1fr 50px;
-                grid-template-rows: 50px 1fr 50px;
-
-                gap: 10px;
-
-                padding: 10px;
-                box-sizing: border-box;
-            }
-
-            .container div {
-                padding: 10px;
-                border: 1px solid #000;
-                background-color: #89a3d0;
-            }
-
-            .header {
-                grid-column-start: 1;
-                grid-column-end: 4;
-
-                text-align: center;
-                font-size: 25px;
-                
-            }
-            
-            .content-large {
-                grid-column-start: 2;
-                grid-column-end: 3;
-                grid-row-start: 2;
-                grid-row-end: span 1;
-                overflow-y: scroll;
-            }
-
-            .content-small{
-
-                display: grid;
-
-                grid-template-rows: 30px 1fr 30px;
-
-                grid-column-start: 1;
-                grid-row-start: span 1;
-                grid-row-end: span 1;
-            }
-            
-            .footer{
-                grid-column: 1 / span 3;
-            }
-
-            .EditTextarea{
-                font-family: 'Quicksand', sans-serif;
-                font-weight: lighter;
-                font-size: 20px;
-
-                resize: none;
-
-                width: 100%;
-                height: auto;
-                padding: 1%;
-                box-sizing: border-box;
-            }
-
-            .post{
-                font-weight: lighter;
-                
-                width: 90%;
-                height: auto;
-
-                
-            }
-        </style>
     </head>
-
     <body>
         <div class="container">
 
@@ -99,8 +16,8 @@
                 <ul id="postList">
                     {% for i in data|sort(attribute='id', reverse = True)%}
                         {% if i.id_persona == user.id %}
-                            <div  id="post_{{i.id}}" class="post" style="background-color: rgb(158, 195, 236);">{{user.name}}: 
-                                <div id="postContent_{{i.id}}" style="background-color: aliceblue;">
+                            <div  id="post_{{i.id}}" class="post" >{{user.name}}: 
+                                <div id="postContent_{{i.id}}" >
                                     {{i.comment}}
                                 </div>
                                 <input id="editbutton_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Edit"></input>
