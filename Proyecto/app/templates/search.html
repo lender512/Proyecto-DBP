@@ -7,15 +7,26 @@
         </title>
     </head>
     <body>
-        <div id="error" class="hidden" style="color: red; size: 10in;">
-            No se encontró ningún distrito con este nombre :c
+        <div class="container">
+            <div class="header">
+                Muro
+                <form id="search-district" method="POST">
+                    <input type="text" id="search_district_input" name="search_district_input" placeholder="search district"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </div>
+            <div id="error" class="hidden" style="color: red; size: 10in;">
+                No se encontró ningún distrito con este nombre :c
+            </div>
+            <ul id="districts">
+                {% for i in data|sort(attribute='id', reverse = True)%}
+                    <div class="post" >{{modelo.query.get(i.id_persona).name}} ({{i.district}}, {{i.address}}):
+                        <div class="comment">
+                            {{i.comment}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
         </div>
-        <ul id="districts">
-            {% for d in data %}
-                <li>
-                    {{ d.comment }}
-                </li>
-            {% endfor %}
-        </ul>
     </body>
 </html>
