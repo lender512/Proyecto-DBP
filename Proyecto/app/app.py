@@ -256,10 +256,10 @@ def search_by_district():
 def search(district_searched):
     return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, user = current_user)
 
-@app.route('/search', methods=["POST"])
-def search_(district_searched):
+@app.route('/search/<district_searched>', methods=['POST'])
+def search_post(district_searched):
     district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
-    return redirect('search/'+district_searched)
+    return redirect(district_searched)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
