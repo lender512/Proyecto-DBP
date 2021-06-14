@@ -15,6 +15,7 @@ from models import *
 from werkzeug.utils import redirect
 
 from flask_migrate import Migrate
+import sys
 
 app = Flask(__name__)
 
@@ -247,6 +248,7 @@ def main():
 def edit():
     return render_template('edit.html', data = Post.query.all(), persons = Person.query.all(), user = current_user)
 
+### SEARCHER
 @app.route('/main', methods=['POST'])
 def search_by_district():
     district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
@@ -254,12 +256,26 @@ def search_by_district():
 
 @app.route('/search/<district_searched>')
 def search(district_searched):
-    return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, user = current_user)
+    length = len(Post.query.filter_by(district=district_searched).all())
+    if length > 0:
+        return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, empty = False,  not_search = False,user = current_user)
+    else:
+        return render_template('search.html', data = [], modelo = Person, empty = True, not_search = False,user = current_user)
 
 @app.route('/search/<district_searched>', methods=['POST'])
 def search_post(district_searched):
     district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
+    print(district_searched)
     return redirect(district_searched)
+
+@app.route('/search/')
+def search_empty():
+    return redirect(url_for('search_empty2'))
+
+@app.route('/search/not_search')
+def search_empty2():
+    return render_template('search.html', data = [], modelo = Person, empty = False, not_search = True,user = current_user)
+### SEARCHER END
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
