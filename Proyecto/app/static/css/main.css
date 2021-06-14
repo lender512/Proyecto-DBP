@@ -116,3 +116,22 @@ body {
 ul div .comment{
     background: #2ecc71;
   }
+
+#search_district {
+    float: right;
+  }
+
+#search_district #searcher{
+    float: right;
+    margin: 0 px;
+    border:0;
+    background: none;
+    display: block;
+    border: 2px solid #2ecc71;
+    padding: 0px 7px;
+    outline: none;
+    color: white;
+    border-radius: 0;
+    transition: 0.25s;
+    cursor: pointer;
+  }
