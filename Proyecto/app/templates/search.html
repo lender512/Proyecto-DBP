@@ -16,9 +16,16 @@
                     <input type="submit" id="searcher" value="Submit"/>
                 </form>
             </div>
-            <div id="error" class="hidden" style="color: red; size: 10in;">
-                No se encontró ningún distrito con este nombre :c
+            {% if empty %}
+            <div id="empty">
+                No se encontró ninguna fiesta en este distrito :c
             </div>
+            {% endif %}
+            {% if not_search %}
+            <div id="not_search">
+                Aqui podrá buscar fiestas según el distrito que más prefiera c:
+            </div>
+            {% endif %}
             <ul id="districts">
                 {% for i in data|sort(attribute='id', reverse = True)%}
                     <div class="post" >{{modelo.query.get(i.id_persona).name}} ({{i.district}}, {{i.address}}):
