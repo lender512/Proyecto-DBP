@@ -177,44 +177,49 @@ def create_apartment():
 
     return jsonify(response)
 
-@app.route('/apartments/<apartment_id>/update', methods=['POST'])
-def update_apartment_by_id(apartment_id):
+
+@app.route('/apartments/edit', methods =['POST'])
+def edit_apartment():
     response = {}
     error = False
     try:
-        apartment = Apartment.query.get_or_404(apartment_id)
-        if apartment is None:
-            response['error_message'] = apartment_id + 'not found in database!'
-        new_apartment = request.get_json()['apartment']
-        apartment.address = new_address
-        apartment.district = new_district
+        district = request.get_json()['district']
+        address = request.get_json()['address']
+        apartment_id = request.get_json()['aparment_id']
+        apartment = db.session.query(Apartment).filter(Apartment.id == apartment_id).first()
+        db.session.expunge(apartment)
+        apartment.district = district
+        apartment.address = address
+        db.session.add(apartment)
         db.session.commit()
     except:
         error = True
         db.session.rollback()
     finally:
         db.session.close()
-    if error:
-        response['error_message2'] = 'something went wrong updating!'
+
+    response['district'] = district
+    response['address'] = address
+    response['id'] = apartment_id
+
     return jsonify(response)
 
-@app.route('/apartments/<apartment_id>/delete-apartment', methods=['DELETE'])
-def delete_apartment_by_id(apartment_id):
+
+@app.route('/apartments/delete', methods=['POST'])
+def delete_apartment():
     response = {}
     error = False
     try:
-        apartment = Apartment.query.get_or_404(apartment_id)
-        if apartment is None:
-            response['error_message'] = apartment_id + 'not found in database!'
-        #db.session.delete(apartment)
-        Apartment.query.filter_by(id=apartment_id).delete()
+        apartment_id = request.get_json()['apartment_id']
+        apartment = db.session.query(Apartment).get(int(apartment_id))
+        db.session.delete(apartment)
         db.session.commit()
     except:
         error = True
         db.session.rollback()
     finally:
         db.session.close()
-    response['success'] = error
+    response['id'] = apartment_id
     return jsonify(response)
 
 @app.route('/logIn', methods=['POST'])

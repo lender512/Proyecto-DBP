@@ -71,31 +71,37 @@
                     </div>
                 </form>
                 <ul id="apartmentList">
-                    {% for i in apartments%}
-                            {% if i.id_persona == user.id %}
-                                <li>
-                                    {{i.district}},  {{i.address}}
-                                    <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
-                                </li>
+                    {% for i in apartments|sort(attribute='id')%}
+                        {% if i.id_persona == user.id %}
+                            <li id="apartment_{{i.id}}">
+                                {{i.district}}, {{i.address}}
+                                <button id="deletebutton_{{i.id}}" class="delete-button">&Cross;</button>
+                            </li>
+                            <script>
+                                var deletebutton = document.getElementById('deletebutton_{{i.id}}')
+                                deletebutton.onclick = function(){
+                                    fetch('/apartments/delete', {
+                                            method: "POST",
+                                            body: JSON.stringify({
+                                                'apartment_id' : '{{i.id}}'
+                                            }),
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            }
+                                        }).then(function(response) {
+                                            return response.json()
+                                        }).then(function(jsonresponse){
+                                            var id = "apartment_" + jsonresponse['id']
+                                            document.getElementById(id).remove()
+                                            item.remove()
+                                        })
+                                }
+                            </script>
+                            
                             {%endif%}
                     {% endfor %}
                 </ul>
                 <script>
-                     const items = document.querySelectorAll('.delete-button')
-                    for(let i = 0; i < items.length; i++){
-                        const item = items[i]
-                        item.onclick = function(e){
-                            console.log('onclick event: ', e)
-                            const apartment_id = e.target.dataset['id']
-                            fetch('/apartments/'+ apartment_id + '/delete-apartment',{
-                                method:'DELETE'
-                            }).then(function(){
-                                console.log('event : ', e)
-                                const item = e.target.parentElement
-                                item.remove()
-                            })
-                        }
-                    }
                     document.getElementById('crear-apartment').onsubmit = function(e){
                         e.preventDefault();
                         fetch('/apartments/create',{
@@ -117,12 +123,12 @@
 
                                 const deleteBtn = document.createElement('button')
                                 deleteBtn.className = 'delete-button'
-                                deleteBtn.setAttribute('data-id', jsonResponse.id)
                                 deleteBtn.innerHTML = '&cross;'
                                 liItem.appendChild(deleteBtn)
                                 document.getElementById('apartmentList').appendChild(liItem)
                                 document.getElementById('district').value = ''
                                 document.getElementById('address').value = ''
+                                window.location.reload(true)
                             }else{
                                 const message = jsonResponse['error_message']
                                 document.getElementById('error').className = ''
