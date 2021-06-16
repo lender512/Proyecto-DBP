@@ -6,7 +6,7 @@ Foobar is a Python library for dealing with word pluralization.
 
 | <a target="_blank">**Luis Berrospi**</a> | <a target="_blank">**Mauricio Nieto**</a> | <a target="_blank">**Julio Sarazu**</a> |<a target="_blank">**Adrián Boza**</a> |
 | :---: | :---:| :---:| :---:|
-| ![Luis](https://avatars2.githubusercontent.com/u/52045791?v=3&s=150) | ![Mauricio](https://avatars.githubusercontent.com/u/40300535?s=64&v=4) | ![Julio](https://avatars.githubusercontent.com/u/40171658?s=64&v=4) | ![Adrian](https://avatars.githubusercontent.com/u/40300535?v=4) |
+| ![Luis](https://avatars2.githubusercontent.com/u/52045791?v=3&s=150) | ![Mauricio](https://avatars.githubusercontent.com/u/40300535?v=4) | ![Julio](https://avatars.githubusercontent.com/u/40171658?s=64&v=4) | ![Adrian](https://avatars.githubusercontent.com/u/40300535?v=4) |
 | <a href="https://github.com/lender512" target="_blank">`github.com/lender512`</a> | <a href="https://github.com/morphisjustfun" target="_blank">`github.com/morphisjustfun`</a> | <a href="https://github.com/daniela08" target="_blank">`github.com/daniela08`</a> |<a href="https://github.com/miyulo139" target="_blank">`github.com/miyulo139`</a> |
 
 ## asdad
