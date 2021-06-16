@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% set found = false %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -21,14 +22,16 @@
                 Write Post <br>
                 <form id="newPost">
                     <textarea class="PostTextArea" id="postComment" placeholder="What are you thinking?"></textarea>
-                    <select id="selectedApartment">
-                        {% for i in apartments%}
-                            {% if i.id_persona == user.id %}
-                                <option value="{{i.address}}">{{i.address}}</option> 
-                            {%endif%}
-                    {% endfor %}
-                    </select>
-                    <input type="submit" value="Create post"/>
+                    
+                        <select id="selectedApartment">
+                            {% for i in apartments%}
+                                {% if i.id_persona == user.id %}
+                                    <option value="{{i.address}}">{{i.address}}</option> 
+                                {%endif%}
+                        {% endfor %}
+                        </select>
+                        <input type="submit" value="Create post"/>
+                    
                 </form>
 
                 <script>
@@ -46,18 +49,31 @@
                         }).then(function(response) {
                             return response.json()
                         }).then(function(jsonResponse){
-                            const listItem = document.createElement("div")
-                            listItem.classList.add("post")
-                            //listItem.setAttribute("style", "background-color: rgb(158, 195, 236)")
-                            //listItem.innerHTML = jsonResponse['comment']
-                            newitem = jsonResponse['name'] + "("+ jsonResponse['district'] + ", " + jsonResponse['address'] + ")" +": "
-                            const content = document.createElement("div")
-                            //content.setAttribute("style", "background-color: aliceblue")
-                            content.appendChild(document.createTextNode(jsonResponse['comment']))
-                            
-                            listItem.appendChild(document.createTextNode(newitem));
-                            listItem.appendChild(content)
-                            document.getElementById('postList').prepend(listItem)
+                            console.log(jsonResponse)
+                            if (jsonResponse['error'] === true) {
+                                alert(jsonResponse['error_msg']);
+                            } else {
+                                const listItem = document.createElement("div")
+                                listItem.className = "post"
+
+                                newitem = jsonResponse['name'] + "("+ jsonResponse['district'] + ", " + jsonResponse['address'] + ")" +": "
+                                const content = document.createElement("div")
+                                content.className = 'comment'
+                                
+                                content.appendChild(document.createTextNode(jsonResponse['comment']))
+                                
+                                //const buttonDiv = document.createElement("div")
+
+                                //const button = document.createElement('button')
+                                //button.className = 'val'
+                                //button.innerHTML = '0'
+                                //buttonDiv.appendChild(button)
+
+                                listItem.appendChild(document.createTextNode(newitem));
+                                listItem.appendChild(content)
+                                //listItem.appendChild(buttonDiv)
+                                document.getElementById('postList').prepend(listItem)
+                            }
                         })
                     }
                 </script>
@@ -75,7 +91,7 @@
                         {% if i.id_persona == user.id %}
                             <li id="apartment_{{i.id}}">
                                 {{i.district}}, {{i.address}}
-                                <button id="deletebutton_{{i.id}}" class="delete-button">&Cross;</button>
+                                <button id="deletebutton_{{i.id}}" class="delete-button" style="float: right;">&Cross;</button>
                             </li>
                             <script>
                                 var deletebutton = document.getElementById('deletebutton_{{i.id}}')
@@ -122,6 +138,7 @@
                                 liItem.appendChild(text)
 
                                 const deleteBtn = document.createElement('button')
+                                deleteBtn.style.cssText = 'float: right'
                                 deleteBtn.className = 'delete-button'
                                 deleteBtn.innerHTML = '&cross;'
                                 liItem.appendChild(deleteBtn)
@@ -140,38 +157,61 @@
                 </script>
             </div>
             <div class="content-large">Content a
-                <ul id="postList">
+                <ul class="postList" id="postList">
                     {% for i in data|sort(attribute='id', reverse = True)%}
+                        
                         {%for p in persons%}
-                            {% if i.id_persona == p.id %}
-                                <div class="post" >{{p.name}} ({{i.district}}, {{i.address}}):
-                                    <div class="comment">
-                                        {{i.comment}}
+                            
+                                {% if i.id_persona == p.id %}
+                                    <div class="post" >{{p.name}} ({{i.district}}, {{i.address}}):
+                                        <div class="comment">
+                                            {{i.comment}}
+                                            
+                                        </div>
+                                        <div class="valoration">
+                                            {% if user.id != p.id %}
+                                            
+                                            <button class="valorationButton"  data-id="{{i.id}}"
+                                                {% for like in likes %}
+                                                    {% if user.id == like.id_persona and i.id == like.id_post %}
+                                                    style="background-color: #196b3b;"
+                                                    {% set found = true %}
+                                                    {%endif%}
+                                                {% endfor %}  
+                                            > Let's go!</button>
+                                            {%endif%}
+                                            <button class="val">{{i.valoracion}}</button>
+                                        </div>
                                     </div>
-                                    {% if user.id != p.id %}
-                                        <input id="valoration_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Lets Go"></input>
-                                        <script>
-                                            var valoration = document.getElementById("valoration_{{i.id}}")
-                                            valoration.onclick = function() {
-                                                fetch('/post/upvote', {
-                                                    method: "POST",
-                                                    body: JSON.stringify({
-                                                        'post_id' : '{{i.id}}'
-                                                    }),
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                }
-                                            }).then(function(response){
-                                                valoration.disable = true
-                                            })
-                                            }
-                                        </script>
-                                    {%endif%}
-                                </div>
-                            {%endif%}
+                                {%endif%}
+                            
                         {% endfor %}
                     {% endfor %}
                 </ul>
+
+                <script>
+                    const valorationButtons = document.querySelectorAll('.valorationButton')
+                    for (let i = 0; i < valorationButtons.length; i++) {
+                        const valoration = valorationButtons[i]
+                        valoration.onclick = function(e) {
+                            fetch('/post/upvote', {
+                            method: "POST",
+                            body: JSON.stringify({
+                                'post_id' : e.target.dataset['id']
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                            }).then(function(response){
+                            //valoration.disable = true
+                                location.reload()
+                            })
+                            
+                        }
+                    }
+                  
+                </script>
+
             </div>
             <div class="footer">Footer</div>
 

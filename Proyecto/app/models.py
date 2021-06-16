@@ -11,13 +11,15 @@ class Person(UserMixin, db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-    type = db.Column(db.String(20), nullable=False)
     posts = relationship("Post")
+    likes = relationship("Like")
     apartaments = relationship("Apartment")
 
 
     def __repr__(self):
         return f'Person: {self.id}, {self.name}'
+
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -27,9 +29,16 @@ class Post(db.Model):
     address = db.Column(db.String(150), nullable=False)
     comment = db.Column(db.String(500), nullable=False)
     valoracion = db.Column(db.Integer, nullable=False, default = 0)
+    likes = relationship("Like")
 
     def __repr__(self):
         return f'Post: {self.id}, {self.id_persona}, {self.comment}, {self.district}'
+
+class Like(db.Model):
+    __tablename__ = 'likes'
+    id = db.Column(db.Integer, primary_key=True)
+    id_persona = db.Column(db.Integer, db.ForeignKey(Person.id), nullable=False)
+    id_post = db.Column(db.Integer, db.ForeignKey(Post.id), nullable=False, )
 
 class Apartment(db.Model):
     __tablename__ = 'apartments'
