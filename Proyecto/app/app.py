@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 
-from flask.helpers import url_for
+from flask.helpers import flash, url_for
 from flask.wrappers import Request, Response
 from flask import Flask
 from flask_login import LoginManager, login_user, current_user
@@ -27,6 +27,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+
+
 migrate = Migrate(app, db)
 #db.create_all()
 #db.session.commit()
@@ -52,9 +54,8 @@ def signIn():
     name = request.form.get('name', '')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
-    type = request.form.get('type', '')
     
-    person = Person(name=name, email = email, password = password, type = type)
+    person = Person(name=name, email = email, password = password)
     db.session.add(person)
     db.session.commit()
 
@@ -74,21 +75,33 @@ def create_post():
     response = {}
     error = False
 
-    comment = request.get_json()['comment']
-    address = request.get_json()['address']
-    print(address)
-    apt = Apartment.query.filter_by(address = address).first()
-    
-    post = Post(id_persona=current_user.id, comment = comment, valoracion=0, address = address, district = apt.district)
+    try:
+        comment = request.get_json()['comment']
+        address = request.get_json()['address']
+        if comment.isspace() or len(comment) == 0:
+            error = True
+            response['error_msg'] = 'Can not create empty post'
+            print('string vacio')
+        else: 
+            apt = Apartment.query.filter_by(address = address).first()
+            
+            post = Post(id_persona=current_user.id, comment = comment, valoracion=0, address = address, district = apt.district)
+            
+            db.session.add(post)
+            db.session.commit()
 
-    db.session.add(post)
-    db.session.commit()
-    #db.session.close()
-    response['comment'] = comment
-    response['name'] = current_user.name
-    response['address'] = address
-    response['district'] = apt.district
-    
+            response['comment'] = comment
+            response['name'] = current_user.name
+            response['address'] = address
+            response['district'] = apt.district
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
+    finally:
+        db.session.close()
+
+    response['error'] = error
 
     return jsonify(response)
 
@@ -140,11 +153,17 @@ def upvote_post():
 
     post_id = request.get_json()['post_id']
     print(post_id)
-
-    post = db.session.query(Post).get(int(post_id))
-
-    post.valoracion = post.valoracion + 1
     
+    post = db.session.query(Post).get(int(post_id))
+    like = db.session.query(Like).filter_by(id_persona = current_user.id).filter_by(id_post = post.id).first()
+    if (like is None):
+        like = Like(id_persona = current_user.id, id_post = post_id)
+        post.valoracion = post.valoracion + 1
+        db.session.add(like)
+    else:
+        db.session.delete(like)
+        post.valoracion = post.valoracion - 1
+
     db.session.add(post)
     db.session.commit()
     db.session.close()
@@ -177,44 +196,49 @@ def create_apartment():
 
     return jsonify(response)
 
-@app.route('/apartments/<apartment_id>/update', methods=['POST'])
-def update_apartment_by_id(apartment_id):
+
+@app.route('/apartments/edit', methods =['POST'])
+def edit_apartment():
     response = {}
     error = False
     try:
-        apartment = Apartment.query.get_or_404(apartment_id)
-        if apartment is None:
-            response['error_message'] = apartment_id + 'not found in database!'
-        new_apartment = request.get_json()['apartment']
-        apartment.address = new_address
-        apartment.district = new_district
+        district = request.get_json()['district']
+        address = request.get_json()['address']
+        apartment_id = request.get_json()['aparment_id']
+        apartment = db.session.query(Apartment).filter(Apartment.id == apartment_id).first()
+        db.session.expunge(apartment)
+        apartment.district = district
+        apartment.address = address
+        db.session.add(apartment)
         db.session.commit()
     except:
         error = True
         db.session.rollback()
     finally:
         db.session.close()
-    if error:
-        response['error_message2'] = 'something went wrong updating!'
+
+    response['district'] = district
+    response['address'] = address
+    response['id'] = apartment_id
+
     return jsonify(response)
 
-@app.route('/apartments/<apartment_id>/delete-apartment', methods=['DELETE'])
-def delete_apartment_by_id(apartment_id):
+
+@app.route('/apartments/delete', methods=['POST'])
+def delete_apartment():
     response = {}
     error = False
     try:
-        apartment = Apartment.query.get_or_404(apartment_id)
-        if apartment is None:
-            response['error_message'] = apartment_id + 'not found in database!'
-        #db.session.delete(apartment)
-        Apartment.query.filter_by(id=apartment_id).delete()
+        apartment_id = request.get_json()['apartment_id']
+        apartment = db.session.query(Apartment).get(int(apartment_id))
+        db.session.delete(apartment)
         db.session.commit()
     except:
         error = True
         db.session.rollback()
     finally:
         db.session.close()
-    response['success'] = error
+    response['id'] = apartment_id
     return jsonify(response)
 
 @app.route('/logIn', methods=['POST'])
@@ -241,7 +265,7 @@ def logIn():
 @login_required
 def main():
     db.session.commit()
-    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all(), user = current_user)
+    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all(), likes = Like.query.all(), user = current_user)
 
 @app.route('/edit')
 @login_required
