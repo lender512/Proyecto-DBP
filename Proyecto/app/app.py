@@ -4,6 +4,7 @@ from flask.helpers import flash, url_for
 from flask.wrappers import Request, Response
 from flask import Flask
 from flask_login import LoginManager, login_user, current_user
+from passlib.hash import pbkdf2_sha256
 import os
 import json
 from flask_login.utils import login_required
@@ -54,8 +55,10 @@ def signIn():
     name = request.form.get('name', '')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
+
+    hashed_pasword = pbkdf2_sha256.hash(password)
     
-    person = Person(name=name, email = email, password = password)
+    person = Person(name=name, email = email, password = hashed_pasword)
     db.session.add(person)
     db.session.commit()
 
@@ -78,7 +81,11 @@ def create_post():
     try:
         comment = request.get_json()['comment']
         address = request.get_json()['address']
-        if comment.isspace() or len(comment) == 0:
+
+        if address.isspace() or len(address) == 0:
+            error = True
+            response['error_msg'] = 'Create or select an address first'
+        elif comment.isspace() or len(comment) == 0:
             error = True
             response['error_msg'] = 'Can not create empty post'
             print('string vacio')
@@ -113,21 +120,33 @@ def edit_post():
     comment = request.get_json()['comment']
     post_id = request.get_json()['post_id']
 
-    post = db.session.query(Post).filter(Post.id == post_id).first()
-    db.session.expunge(post)
-    #setattr(post, 'comment', comment)
-    post.comment = comment
-    db.session.add(post)
-    db.session.commit()
-    db.session.close()
-    #db.session.expire_all()
+    try:
+        if comment.isspace() or len(comment) == 0:
+            error = True
+            response['error_msg'] = 'Can not create empty post'
+            print('string vacio')
 
-    response['comment'] = comment
-    response['id'] = post_id
+        else:
+            post = db.session.query(Post).filter(Post.id == post_id).first()
+            db.session.expunge(post)
+            post.comment = comment
+            db.session.add(post)
+            db.session.commit()
+            response['comment'] = comment
+            response['id'] = post_id
+
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
+    finally:
+        db.session.close()
+
+    response['error'] = error
 
     return jsonify(response)
 
-@app.route('/post/delete', methods =['POST'])
+@app.route('/post/delete', methods =['DELETE'])
 def delete_post():
     response = {}
     error = False
@@ -160,9 +179,11 @@ def upvote_post():
         like = Like(id_persona = current_user.id, id_post = post_id)
         post.valoracion = post.valoracion + 1
         db.session.add(like)
+        response['action'] = 'up'
     else:
         db.session.delete(like)
         post.valoracion = post.valoracion - 1
+        response['action'] = 'down'
 
     db.session.add(post)
     db.session.commit()
@@ -170,6 +191,7 @@ def upvote_post():
     #db.session.expire_all()
 
     response['id'] = post_id
+    response['val'] = post.valoracion
 
     return jsonify(response)
 
@@ -252,7 +274,7 @@ def logIn():
     
     person = Person.query.filter_by(email=email).first()
 
-    if(person.password == password):
+    if(pbkdf2_sha256.verify(password, person.password)):
         #session['id'] = person.id
         login_user(person)
         response['succes'] = True
@@ -282,9 +304,9 @@ def search_by_district():
 def search(district_searched):
     length = len(Post.query.filter_by(district=district_searched).all())
     if length > 0:
-        return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, empty = False,  not_search = False,user = current_user)
+        return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, empty = False,  not_search = False,user = current_user, likes = Like.query.all())
     else:
-        return render_template('search.html', data = [], modelo = Person, empty = True, not_search = False,user = current_user)
+        return render_template('search.html', data = [], modelo = Person, empty = True, not_search = False,user = current_user, likes = Like.query.all())
 
 @app.route('/search/<district_searched>', methods=['POST'])
 def search_post(district_searched):

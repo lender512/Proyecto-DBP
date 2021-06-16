@@ -20,13 +20,15 @@
                                 <div id="postContent_{{i.id}}" >
                                     {{i.comment}}
                                 </div>
-                                <input id="editbutton_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Edit"></input>
-                                <input id="deletebutton_{{i.id}}" type="submit" class="grey" style="height: 30px; width: 150px" value="Delete"></input>
+                                <div class="valoration">
+                                    <button id="editbutton_{{i.id}}" type="submit" class="button" style="height: 30px; width: 150px" >Edit</button>
+                                    <button id="deletebutton_{{i.id}}" type="submit" class="button" style="height: 30px; width: 150px" >Delete</button>
+                                </div>
                                 <script>
                                     var deletebutton = document.getElementById('deletebutton_{{i.id}}')
                                     deletebutton.onclick = function(){
                                         fetch('/post/delete', {
-                                                method: "POST",
+                                                method: "DELETE",
                                                 body: JSON.stringify({
                                                     'post_id' : '{{i.id}}'
                                                 }),
@@ -71,10 +73,15 @@
                                                 }
                                             }).then(function(response) {
                                                 return response.json()
-                                            }).then(function(jsonresponse){
-                                                console.log(jsonresponse['comment'])
-                                                console.log(jsonresponse['id'])
-                                                location.reload()
+                                            }).then(function(jsonResponse){
+                                                console.log(jsonResponse)
+                                                if (jsonResponse['error'] === true) {
+                                                    alert(jsonResponse['error_msg']);
+                                                } else {
+                                                    console.log(jsonResponse['comment'])
+                                                    console.log(jsonResponse['id'])
+                                                    location.reload()
+                                                }
                                             })
                                         }
                                     }

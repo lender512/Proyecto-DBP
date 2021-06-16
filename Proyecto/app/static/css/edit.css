@@ -78,15 +78,18 @@ body {
     box-sizing: border-box;
 }
 
-.post{
-    font-weight: lighter;
-    
-    width: 90%;
+div .post{
+    margin-top: 20px;
+    width: 95%;
     height: auto;
-
-    
+    border-radius: 10px;
+    padding-top: 5px;
 }
 
+ul .postList{
+    width: auto;
+    margin: 70%;
+}
 
 div{
     color: white;
@@ -94,5 +97,27 @@ div{
 
 .post div{
     background-color: #2ecc71;
+}
+
+div .valoration {
+    width: fit-content;
+    background-color: transparent;
+    height: 25px;
+    border: none;
+}
+
+.button{
+    border:0;
+    background: none;
+    display: block;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 7px 20px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+    float: right;
 }
 
