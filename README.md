@@ -26,8 +26,7 @@ foobar.pluralize('word') # returns 'words'
 foobar.pluralize('goose') # returns 'geese'
 foobar.singularize('phenomena') # returns 'phenomenon'
 ```
-## Información acerca de las tecnologías utilizadas en Front-end, Back-end y
-Base de datos.
+## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos.
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
 
