@@ -63,14 +63,14 @@
                 </script>
             </div>
             <div class="content-small">
-                <form action="crear-apartment" id='crear-apartment'>
+                <form action="crear-apartment" id='crear-apartament'>
                     <div>
                         <input type="text" name='district' id='district' placeholder='Distrito'> 
                         <input type="text" name='address' id='address' placeholder='Direccion'>
                         <input type="submit" value="Crear">
                     </div>
                 </form>
-                <ul id="apartmentList">
+                <ul id="apartmentList" class="apartmentList">
                     {% for i in apartments%}
                             {% if i.id_persona == user.id %}
                                 <li>

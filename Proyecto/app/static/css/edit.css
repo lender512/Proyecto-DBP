@@ -96,3 +96,23 @@ div{
     background-color: #2ecc71;
 }
 
+ul div .grey{
+     height: 30px;
+     width: 150px;
+     border:0;
+     background: none;
+     margin: 10px auto;
+     text-align: center;
+     border: 1px solid #2ecc71;
+     padding: 14px 20px;
+     outline: none;
+     color: white;
+     border-radius: 20px;
+     transition: 0.25s;
+     cursor: pointer;
+}
+
+ul div .grey:hover{
+    background: #2ecc71;
+}
+
