@@ -78,8 +78,8 @@
                     }
                 </script>
             </div>
-            <div class="content-small">
-                <form action="crear-apartment" id='crear-apartament'>
+            <div class="content-small"> 
+                <form action="crear-apartment" id='crear-apartment'>
                     <div>
                         <input type="text" name='district' id='district' placeholder='Distrito'> 
                         <input type="text" name='address' id='address' placeholder='Direccion'>
@@ -173,7 +173,6 @@
                     const vals = document.querySelectorAll('.val')
                     for (let i = 0; i < valorationButtons.length; i++) {
                         const valoration = valorationButtons[i]
-                        const val = vals[i]
                         valoration.onclick = function(e) {
                             e.preventDefault()
                             fetch('/post/upvote', {
@@ -185,17 +184,6 @@
                                 'Content-Type': 'application/json'
                             }
                             }).then(function(response){
-                                return response.json()
-                            }).then(function(jsonResponse) {
-                                /*if (jsonResponse['action'] == 'up') {
-                                    valoration.style.cssText = "background-color: #196b3b;"
-                                    val.innerHTML = 10
-                                }
-                                    
-                                else if (jsonResponse['action'] == 'down') {
-                                    valoration.style.cssText = "background-color: transparent;"
-                                    val.innerHTML = 15
-                                }*/
                                 location.reload()
                             })
                             

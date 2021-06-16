@@ -191,7 +191,8 @@ def upvote_post():
     #db.session.expire_all()
 
     response['id'] = post_id
-    response['val'] = post.valoracion
+    
+    print("hola")
 
     return jsonify(response)
 
