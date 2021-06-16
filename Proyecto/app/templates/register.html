@@ -6,14 +6,39 @@
     <title>Registro</title>
 </head>
 <body>
-    <form class="box" action="\signIn" method="POST">
+    <form class="box" id="signIn">
         <h1>Registro</h1>
         <input type="text" id="name" name="name" placeholder="Full name">
         <input type="email" id="email" name="email" placeholder="Email">
-        <input type="password" id="password" name="password" placeholder="Password">
-        <input type="password" name="checkPassword" placeholder="Re enter password"/><br>
+        <input type="password" id="password" name="password" placeholder="Password (min 8 characters)">
+        <input type="password" id="checkPassword" name="checkPassword" placeholder="Re enter password"/><br>
         <input type="submit" value="Registrar">
-
     </form> 
+    <script>
+        document.getElementById('signIn').onsubmit = function(e){
+            e.preventDefault();
+            fetch('/signIn', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'name': document.getElementById('name').value,
+                    'email': document.getElementById('email').value,
+                    'password': document.getElementById('password').value,
+                    'checkPassword': document.getElementById('checkPassword').value
+                }),
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            }).then(function(response) {
+                return response.json()
+            }).then(function(jsonResponse) {
+                if (jsonResponse['error'] === true) {
+                    alert(jsonResponse['error_msg']);
+                } else {
+                    window.location = 'http://0.0.0.0:8080/'
+                }
+            })
+                
+        }
+    </script>
 </body>
 </html>

@@ -17,6 +17,7 @@ from werkzeug.utils import redirect
 
 from flask_migrate import Migrate
 import sys
+import re
 
 app = Flask(__name__)
 
@@ -50,19 +51,84 @@ def index():
 def signInButton():
     return render_template('register.html')
 
+def valid_email(email): #email validation
+  return bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email))
+
 @app.route('/signIn', methods=['POST'])
 def signIn():
-    name = request.form.get('name', '')
-    email = request.form.get('email', '')
-    password = request.form.get('password', '')
-
-    hashed_pasword = pbkdf2_sha256.hash(password)
     
-    person = Person(name=name, email = email, password = hashed_pasword)
-    db.session.add(person)
-    db.session.commit()
+    error = False
+    response = {}
+    try:
+        name = request.get_json()['name']
+        email = request.get_json()['email']
+        password = request.get_json()['password']
+        checkPassword = request.get_json()['checkPassword']
 
-    return render_template('index.html')
+        if name.isspace() or len(name) == 0:
+            error = True
+            response['error_msg'] = 'Please write a valid name'
+
+        elif email.isspace() or len(email) == 0 or not valid_email(email) :
+            error = True
+            response['error_msg'] = 'Please write a valid email'
+        
+        elif password.isspace() or len(password) == 0:
+            error = True
+            response['error_msg'] = 'Please write a valid password'
+
+        elif len(password) < 8:
+            error = True
+            response['error_msg'] = 'Password must have at least 8 characters'
+
+        elif password != checkPassword:
+            error = True
+            response['error_msg'] = 'Passwords do not match'
+
+        else:
+            hashed_pasword = pbkdf2_sha256.hash(password)
+        
+            person = Person(name=name, email = email, password = hashed_pasword)
+            db.session.add(person)
+            db.session.commit()
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
+
+    finally:
+        db.session.close()
+        response['error'] = error
+
+    return jsonify(response)
+
+@app.route('/logIn', methods=['POST'])
+def logIn():
+
+    response = {}
+    error = False
+
+    email = request.get_json()['email']
+    password = request.get_json()['password']
+    try: 
+        person = Person.query.filter_by(email=email).first()
+        if person is None:
+            error = True
+            response['error_msg'] = 'Invalid email'
+        elif not pbkdf2_sha256.verify(password, person.password):
+            error = True
+            response['error_msg'] = 'Invalid password'
+            
+        else:
+            login_user(person)
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        
+    finally:
+        response['error'] = error
+
+    return jsonify(response)
 
 @app.route('/logInButton')
 def logInButton():
@@ -107,8 +173,8 @@ def create_post():
         db.session.rollback()
     finally:
         db.session.close()
+        response['error'] = error
 
-    response['error'] = error
 
     return jsonify(response)
 
@@ -141,8 +207,8 @@ def edit_post():
         db.session.rollback()
     finally:
         db.session.close()
+        response['error'] = error
 
-    response['error'] = error
 
     return jsonify(response)
 
@@ -151,18 +217,22 @@ def delete_post():
     response = {}
     error = False
 
-    post_id = request.get_json()['post_id']
-
-    post = db.session.query(Post).get(int(post_id))
+    try:
+        post_id = request.get_json()['post_id']
+        post = db.session.query(Post).get(int(post_id))
     
-    #Post.query.filter(Post.id == int(post_id)).delete()
-    db.session.delete(post)
-    db.session.commit()
-    db.session.close()
-    #db.session.expire_all()
+        db.session.delete(post)
+        response['id'] = post_id
+        db.session.commit()
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
 
-    response['id'] = post_id
-
+    finally:
+        db.session.close()
+        response['error'] = error
+    
     return jsonify(response)
 
 @app.route('/post/upvote', methods =['POST'])
@@ -171,7 +241,6 @@ def upvote_post():
     error = False
 
     post_id = request.get_json()['post_id']
-    print(post_id)
     
     post = db.session.query(Post).get(int(post_id))
     like = db.session.query(Like).filter_by(id_persona = current_user.id).filter_by(id_post = post.id).first()
@@ -264,25 +333,7 @@ def delete_apartment():
     response['id'] = apartment_id
     return jsonify(response)
 
-@app.route('/logIn', methods=['POST'])
-def logIn():
 
-    response = {}
-    error = False
-
-    email = request.get_json()['email']
-    password = request.get_json()['password']
-    
-    person = Person.query.filter_by(email=email).first()
-
-    if(pbkdf2_sha256.verify(password, person.password)):
-        #session['id'] = person.id
-        login_user(person)
-        response['succes'] = True
-    else:
-        response['succes'] = False
-
-    return jsonify(response)
 
 @app.route('/main')
 @login_required

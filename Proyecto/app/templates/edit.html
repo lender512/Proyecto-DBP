@@ -38,8 +38,12 @@
                                             }).then(function(response) {
                                                 return response.json()
                                             }).then(function(jsonresponse){
-                                                var id = "post_" + jsonresponse['id']
-                                                document.getElementById(id).remove()
+                                                if (jsonresponse['error'] === true) {
+                                                    alert(jsonResponse['error_msg']);
+                                                } else {
+                                                    var id = "post_" + jsonresponse['id']
+                                                    document.getElementById(id).remove()
+                                                }
                                             })
                                     }
                                 </script>
@@ -48,6 +52,9 @@
                                     var editbutton = document.getElementById('editbutton_{{i.id}}')
                                     editbutton.onclick = function(){
                                         if (clickcounter == 0) {
+                                            const current_button = document.getElementById('editbutton_{{i.id}}')
+                                            current_button.innerHTML = "Done"
+                                            current_button.style.backgroundColor = '#196b3b'
                                             clickcounter++;
                                             console.log('editbutton_{{i.id}}')
                                             var input = document.createElement("textarea");
@@ -58,7 +65,6 @@
                                             var post = document.getElementById('post_{{i.id}}')
                                             post.removeChild(post.children[0])
                                             post.insertBefore(input, post.children[0])
-                                            editbutton.value = "done"
                                         }
                                         else if (clickcounter == 1) {
                                             console.log(document.getElementById('textarea_{{i.id}}').value)
@@ -74,7 +80,6 @@
                                             }).then(function(response) {
                                                 return response.json()
                                             }).then(function(jsonResponse){
-                                                console.log(jsonResponse)
                                                 if (jsonResponse['error'] === true) {
                                                     alert(jsonResponse['error_msg']);
                                                 } else {

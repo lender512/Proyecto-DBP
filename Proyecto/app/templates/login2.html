@@ -29,13 +29,15 @@
                 return response.json()
                 //console.log("logeado con id: ", response['id']);
                 window.location.href="/main";
-             }).then(function(jsonresponse){
-                 if (jsonresponse['succes'] === true){
-                     console.log("Registrado con el id: ", jsonresponse["id"]);
-                    sessionStorage.setItem("id",jsonresponse["id"]);
-                    console.log("Se guardó en sesion: ", sessionStorage.getItem("id"));
+             }).then(function(jsonResponse){
+                 if (jsonResponse['error'] === true){
+                     alert(jsonResponse['error_msg']);
+                } else {
+                    //console.log("Registrado con el id: ", jsonResponse["id"]);
+                    sessionStorage.setItem("id",jsonResponse["id"]);
+                    //console.log("Se guardó en sesion: ", sessionStorage.getItem("id"));
                     window.location.href="/main";
-                    }
+                }
              })
         }
     </script>
