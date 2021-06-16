@@ -79,41 +79,20 @@
                 </script>
             </div>
             <div class="content-small">
-                <form action="crear-apartment" id='crear-apartment'>
+                <form action="crear-apartment" id='crear-apartament'>
                     <div>
                         <input type="text" name='district' id='district' placeholder='Distrito'> 
                         <input type="text" name='address' id='address' placeholder='Direccion'>
                         <input type="submit" value="Crear">
                     </div>
                 </form>
-                <ul id="apartmentList">
-                    {% for i in apartments|sort(attribute='id')%}
-                        {% if i.id_persona == user.id %}
-                            <li id="apartment_{{i.id}}">
-                                {{i.district}}, {{i.address}}
-                                <button id="deletebutton_{{i.id}}" class="delete-button" style="float: right;">&Cross;</button>
-                            </li>
-                            <script>
-                                var deletebutton = document.getElementById('deletebutton_{{i.id}}')
-                                deletebutton.onclick = function(){
-                                    fetch('/apartments/delete', {
-                                            method: "POST",
-                                            body: JSON.stringify({
-                                                'apartment_id' : '{{i.id}}'
-                                            }),
-                                            headers: {
-                                                'Content-Type': 'application/json'
-                                            }
-                                        }).then(function(response) {
-                                            return response.json()
-                                        }).then(function(jsonresponse){
-                                            var id = "apartment_" + jsonresponse['id']
-                                            document.getElementById(id).remove()
-                                            item.remove()
-                                        })
-                                }
-                            </script>
-                            
+                <ul id="apartmentList" >
+                    {% for i in apartments%}
+                            {% if i.id_persona == user.id %}
+                                <li>
+                                    {{i.district}},  {{i.address}}
+                                    <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
+                                </li>
                             {%endif%}
                     {% endfor %}
                 </ul>

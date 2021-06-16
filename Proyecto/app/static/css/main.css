@@ -125,13 +125,14 @@ div .valoration {
 .container input[type = "submit"]{
     border:0;
     background: none;
+    margin: 10px auto;
     display: block;
     text-align: center;
     border: 2px solid #2ecc71;
-    padding: 7px 20px;
+    padding: 7px 10px;
     outline: none;
     color: white;
-    border-radius: 24px;
+    border-radius: 14px;
     transition: 0.25s;
     cursor: pointer;
     float: right;
@@ -181,3 +182,7 @@ ul div .comment{
     transition: 0.25s;
     cursor: pointer;
   }
+
+ div .content-small {
+    outline: none;
+}
