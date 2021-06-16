@@ -1,13 +1,13 @@
-# Proyecto-DBP
+# Desarrollo Basado en Plataformas Sección 2.01 - Proyecto 1
 
 Foobar is a Python library for dealing with word pluralization.
 
 ## Integrantes
 
-| <a target="_blank">**Luis Berrospi**</a> | <a target="_blank">**Mario Rios**</a> | <a target="_blank">**Daniela Cauti**</a> |<a target="_blank">**Milagros Yupanqui**</a> |
+| <a target="_blank">**Luis Berrospi**</a> | <a target="_blank">**Mauricio Nieto**</a> | <a target="_blank">**Julio Sarazu**</a> |<a target="_blank">**Adrián Boza**</a> |
 | :---: | :---:| :---:| :---:|
-| ![Luis](https://avatars2.githubusercontent.com/u/52045791?v=3&s=150) | ![Mario](https://avatars2.githubusercontent.com/u/57011629?v=3&s=150) | ![Daniela](https://avatars2.githubusercontent.com/u/52045791?v=3&s=150) | ![Milagros](https://avatars2.githubusercontent.com/u/55298493?v=3&s=150) |
-| <a href="https://github.com/lender512" target="_blank">`github.com/lender512`</a> | <a href="https://github.com/morphisjustfun" target="_blank">`github.com/morphisjustfun`</a> | <a href="https://github.com/daniela08" target="_blank">`github.com/daniela08`</a> |<a href="https://github.com/miyulo139" target="_blank">`github.com/miyulo139`</a> |
+| ![Luis](https://avatars2.githubusercontent.com/u/52045791?v=3&s=150) | ![Mauricio](https://avatars.githubusercontent.com/u/63524901?v=4) | ![Julio](https://avatars.githubusercontent.com/u/40171658?s=64&v=4) | ![Adrian](https://avatars.githubusercontent.com/u/40300535?v=4) |
+| <a href="https://github.com/lender512" target="_blank">`github.com/lender512`</a> | <a href="https://github.com/Elmau1618" target="_blank">`github.com/Elmau1618`</a> | <a href="https://github.com/kalehtfree123" target="_blank">`github.com/kalehtfree123`</a> |<a href="https://github.com/adrianboza" target="_blank">`github.com/adrianboza`</a> |
 
 ## asdad
 
