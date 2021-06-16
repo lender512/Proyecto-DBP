@@ -40,8 +40,9 @@ flask, SQLAlchemy,
 Postgresql, Heroku
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+Se ejecuta app.py que recibe los modelos y las tablas que se crearan de models.py
+'app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False'
 
 db = SQLAlchemy(app)
 
@@ -50,7 +51,7 @@ db = SQLAlchemy(app)
 Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos.
 
 ## Hosts
-localhost:8080
+Utilizamos el localhost:8080
 ## Forma de Autenticación
 
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
