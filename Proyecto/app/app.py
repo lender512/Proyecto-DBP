@@ -17,7 +17,6 @@ from models import *
 from werkzeug.utils import redirect
 
 from flask_migrate import Migrate
-import sys
 import re
 
 app = Flask(__name__)
@@ -352,6 +351,23 @@ def search_empty():
 def search_empty2():
     return render_template('search.html', data = [], modelo = Person, empty = False, not_search = True,user = current_user)
 ### SEARCHER END
+
+# Error handler
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(401)
+def page_not_found(e):
+    return render_template('401.html'), 401
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html'), 500
+
+@app.errorhandler(410)
+def page_not_found(e):
+    return render_template('410.html'), 410
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
