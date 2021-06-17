@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="valoration">
                                     <button id="editbutton_{{i.id}}" type="submit" class="button" style="height: 30px; width: 150px" >Edit</button>
-                                    <button id="deletebutton_{{i.id}}" type="submit" class="button" style="height: 30px; width: 150px" >Delete</button>
+                                    <button id="deletebutton_{{i.id}}" type="submit" class="button" style="height: 30px; width: 150px; background-color: darkred;" >Delete</button>
                                 </div>
                                 <script>
                                     var deletebutton = document.getElementById('deletebutton_{{i.id}}')
@@ -63,7 +63,8 @@
                                             input.id = 'textarea_{{i.id}}'
                                             var postContent = document.createElement("postContent_{{i.id}}");
                                             var post = document.getElementById('post_{{i.id}}')
-                                            post.removeChild(post.children[0])
+                                            const text = post.children[0]
+                                            text.style.display = 'none'
                                             post.insertBefore(input, post.children[0])
                                         }
                                         else if (clickcounter == 1) {
@@ -85,7 +86,15 @@
                                                 } else {
                                                     console.log(jsonResponse['comment'])
                                                     console.log(jsonResponse['id'])
-                                                    location.reload()
+                                                    var post = document.getElementById('post_{{i.id}}')
+                                                    post.children[0].remove()
+                                                    post.children[0].style.display = 'block'
+                                                    post.children[0].innerHTML = jsonResponse['comment']
+                                                    const current_button = document.getElementById('editbutton_{{i.id}}')
+                                                    current_button.innerHTML = "Edit"
+                                                    current_button.style.backgroundColor = 'transparent'
+                                                    //location.reload()
+                                                    clickcounter = 0
                                                 }
                                             })
                                         }

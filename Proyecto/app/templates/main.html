@@ -47,6 +47,11 @@
                                 'Content-Type': 'application/json'
                             }
                         }).then(function(response) {
+                            if (response.ok){
+                                console.log("Todo Ok")
+                            } else {
+                                console.log("Todo no Ok")
+                            }
                             return response.json()
                         }).then(function(jsonResponse){
                             console.log(jsonResponse)
@@ -78,24 +83,58 @@
                     }
                 </script>
             </div>
-            <div class="content-small"> 
+            <div class="content-small-b"> 
+                <div style="border: transparent;">
+                    Add address
+                </div>
+                <div style="height: 60px; border: transparent;">
+
+               
                 <form action="crear-apartment" id='crear-apartment'>
-                    <div>
+                    
                         <input type="text" name='district' id='district' placeholder='Distrito'> 
                         <input type="text" name='address' id='address' placeholder='Direccion'>
                         <input type="submit" value="Crear">
-                    </div>
+ 
                 </form>
-                <ul id="apartmentList" >
-                    {% for i in apartments%}
-                            {% if i.id_persona == user.id %}
-                                <li>
-                                    {{i.district}},  {{i.address}}
-                                    <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
-                                </li>
-                            {%endif%}
-                    {% endfor %}
-                </ul>
+                </div>
+                <div style="padding: 0px; border: none; padding: 0px;">
+                    <ul id="apartmentList" style="list-style-type: none; padding: 0px;" >
+                        {% for i in apartments%}
+                                {% if i.id_persona == user.id %}
+                                    <li>
+                                        {{i.district}},  {{i.address}}
+                                        <button class="delete-button" data-id='{{i.id}}'>&Cross;</button>
+                                    </li>
+                                {%endif%}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <script>
+                    const deleteButtons = document.querySelectorAll('.delete-button')
+                    for (let i = 0; i < deleteButtons.length; i++) {
+                        const deleteButton = deleteButtons[i]
+                        deleteButton.onclick = function(e) {
+                            e.preventDefault()
+                            fetch('/apartments/delete', {
+                            method: "DELETE",
+                            body: JSON.stringify({
+                                'apartment_id' : e.target.dataset['id']
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                            }).then(function(response){
+                                e.target.parentElement.remove()
+                                location.reload()
+                            })
+                            
+                        }
+                    }
+                  
+                </script>
+
                 <script>
                     document.getElementById('crear-apartment').onsubmit = function(e){
                         e.preventDefault();
@@ -111,7 +150,7 @@
                         }).then(function(response) {
                             return response.json()
                         }).then(function(jsonResponse){
-                            if(jsonResponse['error']===false){
+                            if(jsonResponse['error'] === false){
                                 const liItem = document.createElement("li")
                                 const text = document.createTextNode(' ' + jsonResponse.district + ', ' + jsonResponse.address + ' ')
                                 liItem.appendChild(text)
@@ -125,10 +164,9 @@
                                 document.getElementById('district').value = ''
                                 document.getElementById('address').value = ''
                                 window.location.reload(true)
-                            }else{
-                                const message = jsonResponse['error_message']
-                                document.getElementById('error').className = ''
-                                document.getElementById('error').innerHTML = message
+                            } else {
+                                const message = jsonResponse['error_msg']
+                                alert(message)
                             }
                             
                         });

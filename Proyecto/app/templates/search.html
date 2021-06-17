@@ -26,7 +26,7 @@
                 Aqui podrá buscar fiestas según el distrito que más prefiera c:
             </div>
             {% endif %}
-            <ul id="districts">
+            <ul id="districts" style="grid-column-end: 4; grid-column-start: 1;">
                 {% for i in data|sort(attribute='id', reverse = True)%}
                     <div class="post" >{{modelo.query.get(i.id_persona).name}} ({{i.district}}, {{i.address}}):
                         <div class="comment">

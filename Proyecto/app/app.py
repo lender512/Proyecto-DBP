@@ -1,3 +1,4 @@
+from operator import add
 from flask import Flask, render_template, request, jsonify
 
 from flask.helpers import flash, url_for
@@ -240,28 +241,31 @@ def upvote_post():
     response = {}
     error = False
 
-    post_id = request.get_json()['post_id']
-    
-    post = db.session.query(Post).get(int(post_id))
-    like = db.session.query(Like).filter_by(id_persona = current_user.id).filter_by(id_post = post.id).first()
-    if (like is None):
-        like = Like(id_persona = current_user.id, id_post = post_id)
-        post.valoracion = post.valoracion + 1
-        db.session.add(like)
-        response['action'] = 'up'
-    else:
-        db.session.delete(like)
-        post.valoracion = post.valoracion - 1
-        response['action'] = 'down'
+    try:
+        post_id = request.get_json()['post_id']
+        
+        post = db.session.query(Post).get(int(post_id))
+        like = db.session.query(Like).filter_by(id_persona = current_user.id).filter_by(id_post = post.id).first()
+        if (like is None):
+            like = Like(id_persona = current_user.id, id_post = post_id)
+            post.valoracion = post.valoracion + 1
+            db.session.add(like)
+            response['action'] = 'up'
+        else:
+            db.session.delete(like)
+            post.valoracion = post.valoracion - 1
+            response['action'] = 'down'
 
-    db.session.add(post)
-    db.session.commit()
-    db.session.close()
-    #db.session.expire_all()
-
-    response['id'] = post_id
-    
-    print("hola")
+        response['id'] = post_id
+        db.session.add(post)
+        db.session.commit()
+    except: 
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
+    finally:
+        db.session.close()
+        response['error'] = error
 
     return jsonify(response)
 
@@ -272,19 +276,25 @@ def create_apartment():
     try:
         district = request.get_json()['district']
         address = request.get_json()['address']
-        apartment = Apartment(id_persona=current_user.id, district = district, address= address)
-        db.session.add(apartment)
-        db.session.commit()
-        response['address'] = apartment.address
-        response['district'] = apartment.district
+        if district.isspace() or len(district) == 0:
+            error = True
+            response['error_msg'] = 'Insert valid district'
+        elif address.isspace() or len(address) == 0:
+            error = True
+            response['error_msg'] = 'Insert valid address'
+        else:
+            apartment = Apartment(id_persona=current_user.id, district = district, address= address)
+            db.session.add(apartment)
+            db.session.commit()
+            response['address'] = apartment.address
+            response['district'] = apartment.district
     except:
         error = True
+        response['error_msg'] = 'Something Went Wrong!'
         db.session.rollback()
     finally:
         db.session.close()
-    if error:
-        response['error_message'] = 'Something Went Wrong!'
-    response['error']= error
+        response['error']= error
 
     return jsonify(response)
 
@@ -316,7 +326,7 @@ def edit_apartment():
     return jsonify(response)
 
 
-@app.route('/apartments/delete', methods=['POST'])
+@app.route('/apartments/delete', methods=['DELETE'])
 def delete_apartment():
     response = {}
     error = False
