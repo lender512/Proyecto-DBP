@@ -141,7 +141,7 @@ div .valoration {
     display: block;
     text-align: center;
     border: 2px solid #2ecc71;
-    padding: 7px 10px;
+    padding: 4px 10px;
     outline: none;
     color: white;
     border-radius: 14px;
@@ -181,19 +181,25 @@ ul div .comment{
   }
 
 #search_district #searcher{
-    float: right;
-    margin: 0 px;
     border:0;
     background: none;
+    margin: 2px auto;
     display: block;
-    border: 2px solid #2ecc71;
-    padding: 0px 7px;
+    text-align: center;
+    border: 1px solid #2ecc71;
+    padding: 7px 15px;
     outline: none;
     color: white;
-    border-radius: 0;
+    border-radius: 10px;
     transition: 0.25s;
     cursor: pointer;
+    float: right;
   }
+
+  #search_district #searcher:hover{
+    background: #2ecc71;
+  }
+
 
  div .content-small {
     outline: none;
@@ -201,4 +207,42 @@ ul div .comment{
 
 .delete-button {
     float: right;
+}
+
+.button-edit{
+    border:0;
+    background: none;
+    margin: 2px auto;
+    display: block;
+    border: 1px solid #2ecc71;
+    padding: 5px 20px;
+    outline: none;
+    color: white;
+    border-radius: 10px;
+    transition: 0.25s;
+    cursor: pointer;
+    float: right;
+}
+
+.button-edit:hover{
+    background: #2ecc71;
+}
+
+.button-home{
+    border:0;
+    background: none;
+    margin: 2px auto;
+    display: block;
+    border: 1px solid #2ecc71;
+    padding: 3px 10px;
+    outline: none;
+    color: white;
+    border-radius: 10px;
+    transition: 0.25s;
+    cursor: pointer;
+    float: right;
+}
+
+.button-home:hover{
+    background: #2ecc71;
 }
