@@ -13,10 +13,6 @@
 
 En esta primera entrega hicimos una página web que le permite a las personas a publicar o buscar una fiesta.
 
-```bash
-pip install foobar
-```
-
 ## Objetivos principales / Misión / Visión
 ### Misión:
 - 
