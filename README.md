@@ -1,6 +1,6 @@
 # Desarrollo Basado en Plataformas Sección 2.01 - Proyecto 1
 
-Foobar is a Python library for dealing with word pluralization.
+## Nombre del proyecto: 
 
 ## Integrantes
 
