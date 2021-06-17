@@ -1,6 +1,6 @@
 # Desarrollo Basado en Plataformas Sección 2.01 - Proyecto 1
 
-## Nombre del proyecto: 
+## Nombre del proyecto: Party On
 
 ## Integrantes
 
