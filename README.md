@@ -39,7 +39,7 @@ Postgresql, Heroku
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
 
-'app.py' importando 'models.py'
+`app.py` importando `models.py`
 
 ## Información acerca de los API. Requests y respuestas de cada endpoint utilizado en el sistema
 Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos y para hacer un login y signin.
@@ -93,7 +93,7 @@ def logIn():
 ## Cómo ejecutar el sistema (Deployment scripts)
 La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
 Usar el requirements.txt para saber qué instalar y que todo corra bien.  
-Correr dentro de 'app.py'.
+Correr dentro de `app.py`.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
