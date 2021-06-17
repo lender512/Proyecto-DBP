@@ -11,7 +11,7 @@
 
 ## Descripción del proyecto
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+En esta primera entrega hicimos una página web que le permite a las personas a publicar o buscar una fiesta.
 
 ```bash
 pip install foobar
@@ -19,10 +19,15 @@ pip install foobar
 
 ## Objetivos principales / Misión / Visión
 ### Misión:
+- 
 
 ### Visión:
+- Lograr que la personas se sientan satisfechas con el uso de nuestra plataforma web.
 
 ### Objetivos principales:
+- Tener un login y sign in que permita a los usuarios tener una cuenta personal.
+- Tener un CRUD para los posts.
+- Dar al usuario 
 
 ```python
 import foobar
@@ -35,20 +40,22 @@ foobar.singularize('phenomena') # returns 'phenomenon'
 ### Front-end:
 HTML, CSS
 ### Back-end:
-flask, SQLAlchemy,
+flask, SQLAlchemy, operator, render_template, request, jsonify, flask.helpers, flash, url_for, flask.wrappers, Request, Response, flask_login, LoginManager, login_user, current_user, passlib.hash, pbkdf2_sha256, os, json, flask_login.utils, login_required, sqlalchemy.orm, query, werkzeug.utils, redirect, flask_migrate, migrate, sys y re
 ### Base de datos:
 Postgresql, Heroku
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
-Se ejecuta app.py que recibe los modelos y las tablas que se crearan de models.py
-'app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False'
 
-db = SQLAlchemy(app)
 
 
 ## Información acerca de los API. Requests y respuestas de cada endpoint utilizado en el sistema
-Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos.
+Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos y para hacer un login y signin.
+
+```python
+import flask
+
+@app.route('/logIn', methods=['POST'])'
+```
 
 ## Hosts
 Utilizamos el localhost:8080
