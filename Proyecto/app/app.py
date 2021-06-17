@@ -23,40 +23,45 @@ app = Flask(__name__)
 
 app.secret_key = '12345678910'
 
-#DB config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'
+# DB config
+app.config['SQLALCHEMY_DATABASE_URI'] = '''postgresql://pnpgzwyvgxkqsq:
+                                           c679eba76897107ff58e453bd485504045037c9
+                                           1c313f328e8dcd0939e7955da@ec
+                                           2-3-234-85-177.compute-1.amazonaws.com:
+                                           5432/d83bs9vmmebtt8'''
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
-
 migrate = Migrate(app, db)
-#db.create_all()
-#db.session.commit()
+# login config
 
-#login config
 login = LoginManager(app)
 login.init_app(app)
+
 
 @login.user_loader
 def load_person(id):
     return Person.query.get(int(id))
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/signInButton')
 def signInButton():
     return render_template('register.html')
 
-def valid_email(email): #email validation
-  return bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email))
+
+def valid_email(email):  # email validation
+    return bool(re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email))
+
 
 @app.route('/signIn', methods=['POST'])
 def signIn():
-    
+
     error = False
     response = {}
     try:
@@ -69,10 +74,10 @@ def signIn():
             error = True
             response['error_msg'] = 'Please write a valid name'
 
-        elif email.isspace() or len(email) == 0 or not valid_email(email) :
+        elif email.isspace() or len(email) == 0 or not valid_email(email):
             error = True
             response['error_msg'] = 'Please write a valid email'
-        
+
         elif password.isspace() or len(password) == 0:
             error = True
             response['error_msg'] = 'Please write a valid password'
@@ -87,8 +92,7 @@ def signIn():
 
         else:
             hashed_pasword = pbkdf2_sha256.hash(password)
-        
-            person = Person(name=name, email = email, password = hashed_pasword)
+            person = Person(name=name, email=email, password=hashed_pasword)
             db.session.add(person)
             db.session.commit()
     except:
@@ -102,16 +106,16 @@ def signIn():
 
     return jsonify(response)
 
+
 @app.route('/logIn', methods=['POST'])
 def logIn():
 
     response = {}
     error = False
-    
-    email = request.get_json()['email']
 
+    email = request.get_json()['email']
     password = request.get_json()['password']
-    try: 
+    try:
         person = Person.query.filter_by(email=email).first()
         if person is None:
             error = True
@@ -119,13 +123,13 @@ def logIn():
         elif not pbkdf2_sha256.verify(password, person.password):
             error = True
             response['error_msg'] = 'Invalid password'
-            
+
         else:
             login_user(person)
     except:
         error = True
         response['error_msg'] = 'Something went wrong'
-        
+
     finally:
         response['error'] = error
 
@@ -136,7 +140,7 @@ def logInButton():
     return render_template('login2.html')
 
 
-@app.route('/post/create', methods =['POST'])
+@app.route('/post/create', methods=['POST'])
 def create_post():
     response = {}
     error = False
@@ -151,11 +155,12 @@ def create_post():
         elif comment.isspace() or len(comment) == 0:
             error = True
             response['error_msg'] = 'Can not create empty post'
-        else: 
-            apt = Apartment.query.filter_by(address = address).first()
-            
-            post = Post(id_persona=current_user.id, comment = comment, valoracion=0, address = address, district = apt.district)
-            
+        else:
+            apt = Apartment.query.filter_by(address=address).first()
+
+            post = Post(id_persona=current_user.id, comment=comment,
+                        valoracion=0, address=address, district=apt.district)
+
             db.session.add(post)
             db.session.commit()
 
@@ -171,10 +176,10 @@ def create_post():
         db.session.close()
         response['error'] = error
 
-
     return jsonify(response)
 
-@app.route('/post/edit', methods =['POST'])
+
+@app.route('/post/edit', methods=['POST'])
 def edit_post():
     response = {}
     error = False
@@ -203,10 +208,10 @@ def edit_post():
         db.session.close()
         response['error'] = error
 
-
     return jsonify(response)
 
-@app.route('/post/delete', methods =['DELETE'])
+
+@app.route('/post/delete', methods=['DELETE'])
 def delete_post():
     response = {}
     error = False
@@ -214,7 +219,7 @@ def delete_post():
     try:
         post_id = request.get_json()['post_id']
         post = db.session.query(Post).get(int(post_id))
-    
+
         db.session.delete(post)
         response['id'] = post_id
         db.session.commit()
@@ -226,21 +231,23 @@ def delete_post():
     finally:
         db.session.close()
         response['error'] = error
-    
+
     return jsonify(response)
 
-@app.route('/post/upvote', methods =['POST'])
+
+@app.route('/post/upvote', methods=['POST'])
 def upvote_post():
     response = {}
     error = False
 
     try:
         post_id = request.get_json()['post_id']
-        
+
         post = db.session.query(Post).get(int(post_id))
-        like = db.session.query(Like).filter_by(id_persona = current_user.id).filter_by(id_post = post.id).first()
+        like = db.session.query(Like).filter_by(
+            id_persona=current_user.id).filter_by(id_post=post.id).first()
         if (like is None):
-            like = Like(id_persona = current_user.id, id_post = post_id)
+            like = Like(id_persona=current_user.id, id_post=post_id)
             post.valoracion = post.valoracion + 1
             db.session.add(like)
             response['action'] = 'up'
@@ -262,7 +269,8 @@ def upvote_post():
 
     return jsonify(response)
 
-@app.route('/apartments/create', methods =['POST'])
+
+@app.route('/apartments/create', methods=['POST'])
 def create_apartment():
     response = {}
     error = False
@@ -276,7 +284,8 @@ def create_apartment():
             error = True
             response['error_msg'] = 'Insert valid address'
         else:
-            apartment = Apartment(id_persona=current_user.id, district = district, address= address)
+            apartment = Apartment(id_persona=current_user.id,
+                                  district=district, address=address)
             db.session.add(apartment)
             db.session.commit()
             response['address'] = apartment.address
@@ -287,7 +296,7 @@ def create_apartment():
         db.session.rollback()
     finally:
         db.session.close()
-        response['error']= error
+        response['error'] = error
 
     return jsonify(response)
 
@@ -311,31 +320,47 @@ def delete_apartment():
     return jsonify(response)
 
 
-
 @app.route('/main')
 @login_required
 def main():
     db.session.commit()
-    return render_template('main.html', data = Post.query.all(), persons = Person.query.all(), apartments = Apartment.query.all(), likes = Like.query.all(), user = current_user)
+    return render_template('main.html', data=Post.query.all(),
+                           persons=Person.query.all(),
+                           apartments=Apartment.query.all(),
+                           likes=Like.query.all(), user=current_user)
+
 
 @app.route('/edit')
 @login_required
 def edit():
-    return render_template('edit.html', data = Post.query.all(), persons = Person.query.all(), user = current_user)
+    return render_template('edit.html', data=Post.query.all(),
+                           persons=Person.query.all(), user=current_user)
 
-### SEARCHER
+
+# SEARCHER
 @app.route('/main', methods=['POST'])
 def search_by_district():
-    district_searched = request.form.get('search_district_input', '**distrito no encontrado**')
+    district_searched = request.form.get('search_district_input',
+                                         '**distrito no encontrado**')
     return redirect('search/'+district_searched)
+
 
 @app.route('/search/<district_searched>')
 def search(district_searched):
     length = len(Post.query.filter_by(district=district_searched).all())
     if length > 0:
-        return render_template('search.html', data = Post.query.filter_by(district=district_searched).all(), modelo = Person, empty = False,  not_search = False,user = current_user, likes = Like.query.all())
+        return render_template('search.html',
+                               data=Post.query.filter_by(
+                                   district=district_searched).all(),
+                               modelo=Person, empty=False, not_search=False,
+                               user=current_user,
+                               likes=Like.query.all())
     else:
-        return render_template('search.html', data = [], modelo = Person, empty = True, not_search = False,user = current_user, likes = Like.query.all())
+        return render_template('search.html', data=[], modelo=Person,
+                               empty=True, not_search=False,
+                               user=current_user,
+                               likes=Like.query.all())
+
 
 @app.route('/search/<district_searched>', methods=['POST'])
 def search_post(district_searched):
@@ -343,31 +368,40 @@ def search_post(district_searched):
     print(district_searched)
     return redirect(district_searched)
 
+
 @app.route('/search/')
 def search_empty():
     return redirect(url_for('search_empty2'))
 
+
 @app.route('/search/not_search')
 def search_empty2():
-    return render_template('search.html', data = [], modelo = Person, empty = False, not_search = True,user = current_user)
-### SEARCHER END
+    return render_template('search.html', data=[],
+                           modelo=Person, empty=False,
+                           not_search=True, user=current_user)
+# SEARCHER END
+
 
 # Error handler
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 @app.errorhandler(401)
 def page_not_found(e):
     return render_template('401.html'), 401
+
 
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template('500.html'), 500
 
+
 @app.errorhandler(410)
 def page_not_found(e):
     return render_template('410.html'), 410
+
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
