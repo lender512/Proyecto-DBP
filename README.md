@@ -53,7 +53,8 @@ import flask
 ## Hosts
 Utilizamos el localhost:8080
 ## Forma de Autenticación
-Se verifica que el usuario esté registrado, mediante el login se debe verificar que los datos sean los correctos. Además, la contraseña está encriptada.
+Se verifica que el usuario esté registrado, mediante el login se debe verificar que los datos sean los correctos.  
+Además, la contraseña está encriptada.
 ```python
 import flask
 
@@ -90,8 +91,8 @@ def logIn():
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
 
 ## Cómo ejecutar el sistema (Deployment scripts)
-La primera vez se debe implementar el intéprete de python en Visual Studio Code.
-Usar el requirements.txt para saber qué instalar y que todo corra bien.
+La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
+Usar el requirements.txt para saber qué instalar y que todo corra bien.  
 Correr dentro de app.py
 
 ## Contributing
