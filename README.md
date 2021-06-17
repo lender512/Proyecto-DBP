@@ -27,7 +27,7 @@ pip install foobar
 ### Objetivos principales:
 - Tener un login y sign in que permita a los usuarios tener una cuenta personal.
 - Tener un CRUD para los posts.
-- Dar al usuario 
+- Dar al usuario la posibilidad de tener más de una dirección.
 
 ## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos
 ### Front-end:
@@ -39,7 +39,7 @@ Postgresql, Heroku
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
 
-
+'app.py' importando 'models.py'
 
 ## Información acerca de los API. Requests y respuestas de cada endpoint utilizado en el sistema
 Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos y para hacer un login y signin.
@@ -93,7 +93,7 @@ def logIn():
 ## Cómo ejecutar el sistema (Deployment scripts)
 La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
 Usar el requirements.txt para saber qué instalar y que todo corra bien.  
-Correr dentro de app.py
+Correr dentro de 'app.py'.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
