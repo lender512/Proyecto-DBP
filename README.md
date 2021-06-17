@@ -15,10 +15,10 @@ En esta primera entrega hicimos una página web que le permite a las personas pu
 
 ## Objetivos principales / Misión / Visión
 ### Misión:
-- Nuestra misión es convertir las invitaciones a fiestas en algo rápido y sencillo, accesible para todos y facilmente escalable.
+- Nuestra misión es convertir las invitaciones a fiestas en algo rápido y sencillo, que sea escalable y de fácil uso.
 
 ### Visión:
-- Construir el megáfono por el que la gente pueda conseguir invitados para sus grandes reuniones y dar las herramientas para hacer más accesible la construcción de las mismas.
+- Construir el megáfono por el que la gente pueda conseguir invitados para sus grandes reuniones y dar las herramientas para facilitar la construcción de las mismas.
 
 ### Objetivos principales:
 - Tener un login y sign in que permita a los usuarios tener una cuenta personal.
