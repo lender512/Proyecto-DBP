@@ -94,7 +94,7 @@ def signIn():
             db.session.commit()
     except:
         error = True
-        response['error_msg'] = 'Something went wrong'
+        response['error_msg'] = 'Email already taken'
         db.session.rollback()
 
     finally:
@@ -108,8 +108,9 @@ def logIn():
 
     response = {}
     error = False
-
+    
     email = request.get_json()['email']
+
     password = request.get_json()['password']
     try: 
         person = Person.query.filter_by(email=email).first()
@@ -135,10 +136,6 @@ def logIn():
 def logInButton():
     return render_template('login2.html')
 
-@app.route('/createPost')
-def createPost():
-    return render_template('createPost.html')
-
 
 @app.route('/post/create', methods =['POST'])
 def create_post():
@@ -155,7 +152,6 @@ def create_post():
         elif comment.isspace() or len(comment) == 0:
             error = True
             response['error_msg'] = 'Can not create empty post'
-            print('string vacio')
         else: 
             apt = Apartment.query.filter_by(address = address).first()
             
@@ -191,8 +187,6 @@ def edit_post():
         if comment.isspace() or len(comment) == 0:
             error = True
             response['error_msg'] = 'Can not create empty post'
-            print('string vacio')
-
         else:
             post = db.session.query(Post).filter(Post.id == post_id).first()
             db.session.expunge(post)
@@ -299,33 +293,6 @@ def create_apartment():
     return jsonify(response)
 
 
-@app.route('/apartments/edit', methods =['POST'])
-def edit_apartment():
-    response = {}
-    error = False
-    try:
-        district = request.get_json()['district']
-        address = request.get_json()['address']
-        apartment_id = request.get_json()['aparment_id']
-        apartment = db.session.query(Apartment).filter(Apartment.id == apartment_id).first()
-        db.session.expunge(apartment)
-        apartment.district = district
-        apartment.address = address
-        db.session.add(apartment)
-        db.session.commit()
-    except:
-        error = True
-        db.session.rollback()
-    finally:
-        db.session.close()
-
-    response['district'] = district
-    response['address'] = address
-    response['id'] = apartment_id
-
-    return jsonify(response)
-
-
 @app.route('/apartments/delete', methods=['DELETE'])
 def delete_apartment():
     response = {}
@@ -337,6 +304,7 @@ def delete_apartment():
         db.session.commit()
     except:
         error = True
+        response['error_msg'] = 'Something went wrong'
         db.session.rollback()
     finally:
         db.session.close()
