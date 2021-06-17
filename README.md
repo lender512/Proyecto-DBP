@@ -60,6 +60,39 @@ import flask
 ## Hosts
 Utilizamos el localhost:8080
 ## Forma de Autenticación
+Se verifica que el usuario esté registrado:
+```python
+import flask
+
+@app.route('/logIn', methods=['POST'])
+def logIn():
+
+    response = {}
+    error = False
+
+    email = request.get_json()['email']
+    password = request.get_json()['password']
+    try: 
+        person = Person.query.filter_by(email=email).first()
+        if person is None:
+            error = True
+            response['error_msg'] = 'Invalid email'
+        elif not pbkdf2_sha256.verify(password, person.password):
+            error = True
+            response['error_msg'] = 'Invalid password'
+            
+        else:
+            login_user(person)
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        
+    finally:
+        response['error'] = error
+
+    return jsonify(response)'
+```
+
 
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
 
