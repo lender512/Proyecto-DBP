@@ -28,10 +28,26 @@ En esta primera entrega hicimos una página web que le permite a las personas pu
 ## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos
 ### Front-end:
 HTML, CSS
+#### - index.html:  
+Es la página predeterminada que nos permite registrar o iniciar sesión.
+#### - register.html:  
+Dentro de esta página las personas se pueden registrar.
+#### - login.html:  
+Permite a los usuarios registrados iniciar sesión.
+#### - main.html:  
+Es la página principal que permite al usuario crear una dirección, crear un post con la dirección que desee y/o elegir ir a una fiesta.
+#### - edit.html:  
+Permite al usuario logueado editar o eliminar el post que creó anteriormente.
+#### - search.html:  
+Permite a los usuarios logueados buscar una fiesta a través de una dirección.
 ### Back-end:
 flask, SQLAlchemy, operator, render_template, request, jsonify, flask.helpers, flash, url_for, flask.wrappers, Request, Response, flask_login, LoginManager, login_user, current_user, passlib.hash, pbkdf2_sha256, os, json, flask_login.utils, login_required, sqlalchemy.orm, query, werkzeug.utils, redirect, flask_migrate, migrate, sys y re
+#### - models.py:  
+Permite crear las tablas persons, apartments, posts y likes.  
+#### - app.py:
+Permite implementar el back-end usando flask y más herramientas, además de tomar models.py para el uso de los modelos y lograr que la página web funcione correctamente junto a la base de datos.
 ### Base de datos:
-Postgresql, Heroku
+Postgresql alojado en Heroku.
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
 
