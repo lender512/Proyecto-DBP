@@ -29,13 +29,6 @@ pip install foobar
 - Tener un CRUD para los posts.
 - Dar al usuario 
 
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
 ## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos
 ### Front-end:
 HTML, CSS
@@ -97,6 +90,8 @@ def logIn():
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
 
 ## Cómo ejecutar el sistema (Deployment scripts)
+Se debe implementar el intéprete de python en Visual Studio Code.
+Correr dentro de app.py
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
