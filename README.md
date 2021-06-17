@@ -11,7 +11,7 @@
 
 ## Descripción del proyecto
 
-En esta primera entrega hicimos una página web que le permite a las personas a publicar o buscar una fiesta.
+En esta primera entrega hicimos una página web que le permite a las personas publicar o buscar una fiesta.
 
 ## Objetivos principales / Misión / Visión
 ### Misión:
@@ -39,21 +39,12 @@ Postgresql, Heroku
 
 ## Información acerca de los API. Requests y respuestas de cada endpoint utilizado en el sistema
 Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos y para hacer un login y signin.
-
-```python
-import flask
-
-@app.route('/logIn', methods=['POST'])'
-```
-
 ## Hosts
 Utilizamos el localhost:8080
 ## Forma de Autenticación
 Se verifica que el usuario esté registrado, mediante el login se debe verificar que los datos sean los correctos.  
 Además, la contraseña está encriptada.
 ```python
-import flask
-
 @app.route('/logIn', methods=['POST'])
 def logIn():
 
