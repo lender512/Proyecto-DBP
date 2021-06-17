@@ -11,14 +11,14 @@
 
 ## Descripción del proyecto
 
-En esta primera entrega hicimos una página web que le permite a las personas publicar o buscar una fiesta.
+En esta primera entrega hicimos una página web que le permite a las personas publicar, buscar o unirse a una fiesta.
 
 ## Objetivos principales / Misión / Visión
 ### Misión:
-- 
+- Nuestra misión es convertir las invitaciones a fiestas en algo rápido y sencillo, accesible para todos y facilmente escalable.
 
 ### Visión:
-- Lograr que la personas se sientan satisfechas con el uso de nuestra plataforma web.
+- Construir el megáfono por el que la gente pueda conseguir invitados para sus grandes reuniones y dar las herramientas para hacer más accesible la construcción de las mismas.
 
 ### Objetivos principales:
 - Tener un login y sign in que permita a los usuarios tener una cuenta personal.
