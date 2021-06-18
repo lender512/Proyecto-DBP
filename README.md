@@ -43,7 +43,6 @@ Permite a los usuarios logueados buscar una fiesta a través de una dirección.
 ### Back-end:
 - flask: Framework que permite crear el servidor.
 - flask.helpers: Módulo de flask que permite pasar un string message al request y generar una URL usando el método pasado.
-- flask.wrappers:
 - flask_login: Proporciona gestión de sesiones de usuario para Flask.
 - passlib.hash: Algoritmo de encriptación de contraseñas.
 - os: Permite interactuar con el Sistema Operativo.
@@ -53,7 +52,6 @@ Permite a los usuarios logueados buscar una fiesta a través de una dirección.
 - models: Permite importar los modelos creados para la base de datos.
 - werkzeug.utils: Permite redirigir a otra página.
 - flask_migrate: Permite manejar las migraciones de la base de datos.
-- re: 
 - operator: Exportar funciones. operator.add(x, y) = x+y
 
 #### - models.py:  
