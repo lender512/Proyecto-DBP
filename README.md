@@ -46,6 +46,8 @@ flask, SQLAlchemy, operator, render_template, request, jsonify, flask.helpers, f
 Permite crear las tablas persons, apartments, posts y likes.  
 #### - app.py:
 Permite implementar el back-end usando flask y más herramientas, además de tomar models.py para el uso de los modelos y lograr que la página web funcione correctamente junto a la base de datos.
+#### - test.py:
+Permite realizar el unit testing
 ### Base de datos:
 Postgresql alojado en Heroku.
 
@@ -93,6 +95,7 @@ def logIn():
 
 
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
+De manera amigable se le muestra una alerta o muestra un error al usuario.
 **Alertas**
 - Cuando no se ingresa nada en el registro.
 - Cuando se registra con un correo ya registrado.
@@ -112,14 +115,9 @@ def logIn():
 
 
 ## Cómo ejecutar el sistema (Deployment scripts)
+*Recomendamos abrir desde carpeta app*
 La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
 Usar el requirements.txt para saber qué instalar y que todo corra bien.  
 Correr dentro de `app.py`.
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
