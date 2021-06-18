@@ -41,7 +41,21 @@ Permite al usuario logueado editar o eliminar el post que creó anteriormente.
 #### - search.html:  
 Permite a los usuarios logueados buscar una fiesta a través de una dirección.
 ### Back-end:
-flask, SQLAlchemy, operator, render_template, request, jsonify, flask.helpers, flash, url_for, flask.wrappers, Request, Response, flask_login, LoginManager, login_user, current_user, passlib.hash, pbkdf2_sha256, os, json, flask_login.utils, login_required, sqlalchemy.orm, query, werkzeug.utils, redirect, flask_migrate, migrate, sys y re
+- flask: Framework que permite crear el servidor.
+- flask.helpers: Módulo de flask que permite pasar un string message al request y generar una URL usando el método pasado.
+- flask.wrappers:
+- flask_login: Proporciona gestión de sesiones de usuario para Flask.
+- passlib.hash: Algoritmo de encriptación de contraseñas.
+- os: Permite interactuar con el Sistema Operativo.
+- json: Crear listas de diccionarios.
+- flask_login.utils: Hacer necesario el login para acceder al main.
+- sqlalchemy.orm: Acceder a una base de datos relacional.
+- models: Permite importar los modelos creados para la base de datos.
+- werkzeug.utils: Permite redirigir a otra página.
+- flask_migrate: Permite manejar las migraciones de la base de datos.
+- re: 
+- operator: Exportar funciones. operator.add(x, y) = x+y
+
 #### - models.py:  
 Permite crear las tablas persons, apartments, posts y likes.  
 #### - app.py:
@@ -115,7 +129,7 @@ De manera amigable se le muestra una alerta o muestra un error al usuario.
 
 
 ## Cómo ejecutar el sistema (Deployment scripts)
-*Recomendamos abrir desde carpeta app*
+*Recomendamos abrir desde carpeta app*  
 La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
 Usar el requirements.txt para saber qué instalar y que todo corra bien.  
 Correr dentro de `app.py`.
