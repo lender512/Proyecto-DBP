@@ -51,7 +51,7 @@ Postgresql alojado en Heroku.
 
 ## El nombre del script a ejecutar para iniciar la base de datos con datos
 
-`app.py` importando `models.py`
+No es necesario un script relacionado a las tablas debido a que está alojado en Heroku.
 
 ## Información acerca de los API. Requests y respuestas de cada endpoint utilizado en el sistema
 Utilizamos muchos @app.route para crear, editar y eliminar información en la base de datos y para hacer un login y signin.
@@ -59,6 +59,7 @@ Utilizamos muchos @app.route para crear, editar y eliminar información en la ba
 Utilizamos el localhost:8080
 ## Forma de Autenticación
 Se verifica que el usuario esté registrado, mediante el login se debe verificar que los datos sean los correctos.  
+Si el usuario no se loguea no podrá acceder al main, le aparecerá un error pidiéndole que se loguee.
 Además, la contraseña está encriptada.
 ```python
 @app.route('/logIn', methods=['POST'])
@@ -92,6 +93,23 @@ def logIn():
 
 
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
+**Alertas**
+- Cuando no se ingresa nada en el registro.
+- Cuando se registra con un correo ya registrado.
+- Cuando la contraseña no es mayor de 8 dígitos.
+- Cuando las contraseñas no son las mismas.
+- Cuando no se ingresa nada en el login.
+- Cuando no se ingresa un correo correcto y registrado.
+- Cuando la contraseña no coincide con el correo registrado.
+- Cuando se intenta publicar un post vacío. 
+- Cuando se intenta añadir una dirección vacía.
+- Cuando se intenta crear un post sin elegir una dirección.
+- Cuando se intenta editar un post y guardarlo vacío.  
+### Error 401 Unauthorized: Aparecerá cuando se intenta acceder al main sin antes loguearse.
+### Error 404 Not Found: Aparecerá cuando no encuentra algo en la página.
+### Error 410 Gone: Aparecerá cuando un recurso es solicitado pero ya no está disponible.
+### Error 500 Internal Server Error: Aparecerá cuando el servidor falle.
+
 
 ## Cómo ejecutar el sistema (Deployment scripts)
 La primera vez se debe implementar el intéprete de python en Visual Studio Code.  
