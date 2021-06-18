@@ -95,7 +95,7 @@ def logIn():
 
 
 ## Manejo de errores HTTP: 500, 400, 300, 200, 100, etc
-De manera amigable se le muestra una alerta o muestra un error al usuario.
+De manera amigable se le muestra una alerta o muestra un error al usuario.  
 **Alertas**
 - Cuando no se ingresa nada en el registro.
 - Cuando se registra con un correo ya registrado.
