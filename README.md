@@ -24,8 +24,8 @@ En esta primera entrega hicimos una página web que le permite a las personas pu
 - Tener un login y sign in que permita a los usuarios tener una cuenta personal.
 - Tener un CRUD para los posts.
 - Dar al usuario la posibilidad de tener más de una dirección.
-
-![alt text](https://i.imgur.com/LXFWaSy.jpg)
+## Diagrama de casos de uso.
+![alt text](https://i.imgur.com/G7AARH3.jpg)
 
 ## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos
 ### Front-end:
