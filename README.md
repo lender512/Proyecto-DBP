@@ -25,6 +25,8 @@ En esta primera entrega hicimos una página web que le permite a las personas pu
 - Tener un CRUD para los posts.
 - Dar al usuario la posibilidad de tener más de una dirección.
 
+![alt text](https://i.imgur.com/LXFWaSy.jpg)
+
 ## Información acerca de las tecnologías utilizadas en Front-end, Back-end y Base de datos
 ### Front-end:
 HTML, CSS
