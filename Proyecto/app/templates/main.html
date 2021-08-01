@@ -3,11 +3,14 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"> -->
         <link rel="stylesheet" href="../static/css/main.css">
         <link rel="shortcut icon" href="../static/images/favicon.ico">
+        <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
         <title>
             Main
         </title>
+        {{ share.load(js_url='data-title="Checkout Sharer.js!"') }}
     </head>
     <body>
         <button class="button-edit" onclick="window.location.href='/edit'">Edit</button>
@@ -199,6 +202,9 @@
                                             > Let's go!</button>
                                             {%endif%}
                                             <button class="val" data-id="{{i.id}}">{{i.valoracion}}</button>
+                                            <button class="valorationButton" style="margin-left: 15px; background-color:#1DA1F2; border-color: #1DA1F2" data-sharer="twitter" data-title="{{p.name}}: {{i.comment}} - {{i.address}}" data-hashtags="DBP20" data-url="http://partyon.com">Share on Twitter</button>
+                                            <button class="valorationButton" style="margin-left: 15px; background-color:#595959; border-color: #595959" data-sharer="email" data-title="{{p.name}}: {{i.comment}} - {{i.address}}" data-url="http://partyon.com" data-subject="Party on notification" data-to="some@email.com">Share via Email</button>
+                                            <button class="valorationButton" style="margin-left: 15px; background-color:#4DC247; border-color: #4DC247" data-sharer="whatsapp" data-title="{{p.name}}: {{i.comment}} - {{i.address}}!" data-url="http://partyon.com">Share on Whatsapp</button>
                                         </div>
                                     </div>
                                 {%endif%}

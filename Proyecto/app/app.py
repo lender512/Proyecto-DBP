@@ -20,7 +20,6 @@ from flask_migrate import Migrate
 import re
 
 app = Flask(__name__)
-
 app.secret_key = '12345678910'
 
 # DB config
