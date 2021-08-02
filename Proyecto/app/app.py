@@ -322,7 +322,9 @@ def main():
     return render_template('main.html', data=Post.query.all(),
                            persons=Person.query.all(),
                            apartments=Apartment.query.all(),
-                           likes=Like.query.all(), user=current_user)
+                           likes=Like.query.all(),
+                           #comments = Comment.query.all(),
+                           user=current_user)
 
 
 @app.route('/edit')
