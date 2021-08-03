@@ -77,12 +77,30 @@
                                 //button.innerHTML = '0'
                                 //buttonDiv.appendChild(button)
 
+                                const formItem = document.createElement("form")
+                                const inputtextItem = document.createElement("input")
+                                const inpusubmitItem = document.createElement("input")
+
+                                formItem.className = "make_comment"
+                                inputtextItem.type = "text"
+                                inputtextItem.setAttribute('data-id',jsonResponse['data-id'])
+                                inputtextItem.placeholder = "Comenta..."
+                                inpusubmitItem.type = "submit"
+                                inpusubmitItem.value = "Create"
+                                formItem.appendChild(inputtextItem)
+                                formItem.appendChild(inpusubmitItem)
+                                
+
                                 listItem.appendChild(document.createTextNode(newitem));
                                 listItem.appendChild(content)
+                                listItem.appendChild(formItem)
                                 //listItem.appendChild(buttonDiv)
                                 document.getElementById('postList').prepend(listItem)
                             }
-                        })
+                        }).catch(function(error) {
+                                console.log(error)
+                                alert("Algo salio mal¡ [FE]");
+                            });
                     }
                 </script>
             </div>
