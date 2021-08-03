@@ -205,6 +205,34 @@
                                             <button class="valorationButton" style="margin-left: 15px; background-color:#595959; border-color: #595959" data-sharer="email" data-title="{{p.name}}: {{i.comment}} - {{i.address}}" data-url="http://partyon.com" data-subject="Party on notification" data-to="some@email.com">Share via Email</button>
                                             <button class="valorationButton" style="margin-left: 15px; background-color:#4DC247; border-color: #4DC247" data-sharer="whatsapp" data-title="{{p.name}}: {{i.comment}} - {{i.address}}!" data-url="http://partyon.com">Share on Whatsapp</button>
                                         </div>
+
+                                        
+
+                                          
+                                        <form class='make_comment'>
+                
+                                            <input type="text" data-id='{{user.id}}/{{i.id}}' placeholder='Comenta...'>
+                                            <input type="submit" value="Create">
+                 
+                                        </form>
+                                        <ul class="comments">
+                                        {%for c in comments%}
+                                            {% if c.id_post == i.id %}
+                                            
+                                                <li>
+                                                <p>{{c.author_name}}</p>
+                                                <div class="comments_content">
+                                                    {{c.comment}}
+                                                </div>
+                                                </li>
+                                            
+                                            {%endif%}
+                                        {% endfor %}
+                                        </ul>
+
+
+
+
                                     </div>
                                 {%endif%}
                             
@@ -233,7 +261,57 @@
                             
                         }
                     }
+
+
+                    const createdcomments = document.querySelectorAll('.make_comment')
+                    for (let i = 0; i < createdcomments.length; i++) {
+                        const new_comment = createdcomments[i]
+                        new_comment.onsubmit = function(e) {
+                            e.preventDefault()
+                            if (e.target.firstElementChild.value == ""){
+                                alert("El comentario esta vacío");
+                                return false;
+                            }
+                            console.log(e)
+                            fetch('/post/make_comment', {
+                            method: "POST",
+                            body: JSON.stringify({
+                                'persona_post_id' : e.target[0].dataset['id'],
+                                'comment' : e.target.firstElementChild.value
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                            }).then(function(response){
+                                console.log('respuesta: ', response)
+                                return response.json()
+                            }).then(function(jsonResponse) {
+                                console.log("jsonResponse: ", jsonResponse)
+                                if (jsonResponse['error'] === false) {
+                                    e.target.firstElementChild.value = ""
+                                    const liItem = document.createElement('li')
+                                    const divItem = document.createElement('div')
+                                    const pItem = document.createElement('p')
+                                    divItem.className = "comments_content"
+                                    pItem.innerHTML = jsonResponse['author_name']
+                                    divItem.innerHTML = jsonResponse['comment']
+
+                                    liItem.appendChild(pItem)
+                                    liItem.appendChild(divItem)
+
+                                    e.target.nextElementSibling.appendChild(liItem)
+                                } else {
+                                    alert("Algo salio mal¡ [BE]");
+                                }
+                            }).catch(function(error) {
+                                alert("Algo salio mal¡ [FE]");
+                            });
+                            
+                        }
+                    }
                   
+
+
                 </script>
 
             </div>
