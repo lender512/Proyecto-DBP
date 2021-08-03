@@ -1,6 +1,9 @@
 from operator import add
 from flask import Flask, render_template, request, jsonify
-
+from flask_login.mixins import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 from flask.helpers import flash, url_for
 from flask.wrappers import Request, Response
 from flask import Flask
@@ -25,6 +28,8 @@ app.secret_key = '12345678910'
 # DB config
 app.config['SQLALCHEMY_DATABASE_URI'] = '''postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'''
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abcd1618@127.0.0.1/new_dbdb'
+# local luis
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///testdbp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -35,6 +40,67 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.init_app(app)
 
+class Person(UserMixin, db.Model):
+    __tablename__ = 'persons'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(), nullable=False)
+    posts = relationship("Post")
+    likes = relationship("Like")
+    apartaments = relationship("Apartment")
+    comments = relationship("Comment")
+    def __repr__(self):
+        return f'Person: {self.id}, {self.name}'
+
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
+                           nullable=False)
+    district = db.Column(db.String(30), nullable=False)
+    address = db.Column(db.String(150), nullable=False)
+    comment = db.Column(db.String(500), nullable=False)
+    valoracion = db.Column(db.Integer, nullable=False,
+                           default=0)
+    likes = relationship("Like")
+    comments = relationship("Comment")
+
+    def __repr__(self):
+        return f'Post: {self.id}, {self.id_persona}, {self.comment}, {self.district}'
+
+
+class Like(db.Model):
+    __tablename__ = 'likes'
+    id = db.Column(db.Integer, primary_key=True)
+    id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
+                           nullable=False)
+    id_post = db.Column(db.Integer, db.ForeignKey(Post.id), nullable=False, )
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(500), nullable=False)
+    author_name = db.Column(db.String(500), nullable=False)
+    id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
+                           nullable=False)
+    id_post = db.Column(db.Integer, db.ForeignKey(Post.id), nullable=False, )
+
+
+class Apartment(db.Model):
+    __tablename__ = 'apartments'
+    id = db.Column(db.Integer, primary_key=True)
+    id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
+                           nullable=False)
+    district = db.Column(db.String(30), nullable=False)
+    address = db.Column(db.String(150), nullable=False)
+
+    def __repr__(self):
+        return f'Apartment: {self.id}, {self.id_persona}, {self.district}, {self.address}'
+
+db.create_all()
+db.session.commit()
 
 @login.user_loader
 def load_person(id):
