@@ -230,6 +230,7 @@ def create_post():
             response['name'] = current_user.name
             response['address'] = address
             response['district'] = apt.district
+            response['data-id'] = str(current_user.id) + "/" + str(post.id)
     except:
         error = True
         response['error_msg'] = 'Something went wrong'
