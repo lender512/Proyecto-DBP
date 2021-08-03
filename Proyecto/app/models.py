@@ -15,7 +15,7 @@ class Person(UserMixin, db.Model):
     posts = relationship("Post")
     likes = relationship("Like")
     apartaments = relationship("Apartment")
-    #comments = relationship("Comment")
+    comments = relationship("Comment")
     def __repr__(self):
         return f'Person: {self.id}, {self.name}'
 
@@ -31,7 +31,7 @@ class Post(db.Model):
     valoracion = db.Column(db.Integer, nullable=False,
                            default=0)
     likes = relationship("Like")
-    #comments = relationship("Comment")
+    comments = relationship("Comment")
 
     def __repr__(self):
         return f'Post: {self.id}, {self.id_persona}, {self.comment}, {self.district}'
@@ -43,7 +43,7 @@ class Like(db.Model):
     id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
                            nullable=False)
     id_post = db.Column(db.Integer, db.ForeignKey(Post.id), nullable=False, )
-'''
+
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
@@ -52,7 +52,7 @@ class Comment(db.Model):
     id_persona = db.Column(db.Integer, db.ForeignKey(Person.id),
                            nullable=False)
     id_post = db.Column(db.Integer, db.ForeignKey(Post.id), nullable=False, )
-'''
+
 
 class Apartment(db.Model):
     __tablename__ = 'apartments'
@@ -65,5 +65,5 @@ class Apartment(db.Model):
     def __repr__(self):
         return f'Apartment: {self.id}, {self.id_persona}, {self.district}, {self.address}'
 
-# db.create_all()
-# db.session.commit()
+#db.create_all()
+#db.session.commit()
