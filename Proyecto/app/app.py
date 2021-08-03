@@ -24,6 +24,7 @@ app.secret_key = '12345678910'
 
 # DB config
 app.config['SQLALCHEMY_DATABASE_URI'] = '''postgresql://pnpgzwyvgxkqsq:c679eba76897107ff58e453bd485504045037c91c313f328e8dcd0939e7955da@ec2-3-234-85-177.compute-1.amazonaws.com:5432/d83bs9vmmebtt8'''
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:abcd1618@127.0.0.1/new_dbdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -264,6 +265,36 @@ def upvote_post():
 
     return jsonify(response)
 
+@app.route('/post/make_comment', methods=['POST'])
+def make_comment():
+    response = {}
+    error = False
+    try:
+        comment = request.get_json()['comment']
+        persona_post_id = request.get_json()['persona_post_id']
+        
+        separation = persona_post_id.find('/')
+        persona_id = persona_post_id[:separation]
+        post_id = persona_post_id[separation+1:]
+
+        author_name = db.session.query(Person).get(int(persona_id))
+        author_name = author_name.name
+        new_comment = Comment(comment=comment,author_name=author_name,id_persona = int(persona_id),id_post= int(post_id))
+        
+        db.session.add(new_comment)
+        db.session.commit()
+
+        response['author_name'] = author_name
+        response['comment'] = comment
+    except:
+        error = True
+        response['error_msg'] = 'Something went wrong'
+        db.session.rollback()
+    finally:
+        db.session.close()
+        response['error'] = error
+
+    return jsonify(response)
 
 @app.route('/apartments/create', methods=['POST'])
 def create_apartment():
@@ -323,7 +354,7 @@ def main():
                            persons=Person.query.all(),
                            apartments=Apartment.query.all(),
                            likes=Like.query.all(),
-                           #comments = Comment.query.all(),
+                           comments = Comment.query.all(),
                            user=current_user)
 
 
